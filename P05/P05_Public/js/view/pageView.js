@@ -24,12 +24,7 @@ define([ 'jquery', 'underscore', 'backbone',
 
 			var realCurrentId = this.collection.getHistory()
 					+ this.model.get('cellId');
-			console.log("realCurrentId: " + realCurrentId);
-			console.log("this.collection.getMemory(): "
-					+ this.collection.getHistory());
-			console
-					.log("this.model.get('cellId'): "
-							+ this.model.get('cellId'));
+
 			var vars = {};
 
 			//add "-r2c2" at the end of the id: every cell is meant to become center (r2c2),
@@ -147,11 +142,30 @@ define([ 'jquery', 'underscore', 'backbone',
 
 			}
 
-			//TODO swipe handler
-			//this.el.swiperight(function() { 
+			this.el.swiperight(function() { 
 
-			//document.location.href="#/page/r2c3";
-			//});
+			document.location.href="#/page/"+vars.leftNav;
+			});
+			
+			this.el.swipeleft(function() { 
+
+			document.location.href="#/page/"+vars.rightNav;
+				});
+			
+			
+			
+			
+			this.el.swipeup(function() { 
+
+			document.location.href="#/page/"+vars.bottomNav;
+			});
+			
+			this.el.swipedown(function() { 
+
+			document.location.href="#/page/"+vars.topNav;
+				});
+				
+			
 			this.trigger("pageRendered", vars.cell);
 
 		},

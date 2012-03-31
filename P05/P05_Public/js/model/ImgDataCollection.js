@@ -138,12 +138,48 @@ define(
 						
 						//triggered before the page change
 		                beforeChange : function(e, data) {
+		                	
+		                	var currentPage;
+		                	var transitionType;
+		                	var isReverse;
+							
+							if($(data.toPage).attr("id") != "r2c2"){
+							var cArray = $(data.toPage).attr("id").split("-");
+							// get the second to last (last being r2c2)
+							cArray.pop();
+							currentPage = cArray.pop();
+							
+							if (currentPage== "r1c2" || currentPage== "r3c2"){
+								
+								transitionType = "slideUp";
+								
+								
+							}
+							else {
+								transitionType = "slide";
+								
+							}
+							
+							if (currentPage== "r1c2" || currentPage== "r2c3"){
+								
+								isReverse = true;
+								
+								
+							}
+							else {
+								isReverse = false;
+								
+							}
+							
+							
+							}
 
 								if (typeof data.toPage === "string") {
 
 									$(data.toPage).page();
 									$.mobile.changePage($(data.toPage), {
-										transition : "slide",
+										transition : transitionType,
+										reverse : isReverse,
 										allowSamePageTransition : true,
 										changeHash : false
 									});
