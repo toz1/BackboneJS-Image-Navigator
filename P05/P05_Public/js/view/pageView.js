@@ -36,8 +36,33 @@ define([ 'jquery', 'underscore', 'backbone',
 			//so if it's set now there is no need to update this value once they are displayed
 			//(the visible page always ends by r2c2, the naming of the target pages is an anticipation
 			// so as not to have to chance the id once it's displayed)
+			// set the divId on the model so as to be able in the Collection to avoid generating doubles
+			
 			this.divId = realCurrentId + "-r2c2";
+			
+			// set the divId on the model so as to be able in the Collection to avoid generating doubles
+			console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ........... ?????? "+this.divId);
+			console.log("model cellId >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   "+this.model.get("cellId"));
 
+			
+			
+			
+			//check if divId already exists
+			for ( var a in this.collection.models) {
+				console.log("divId "+ this.collection.models[a].get("divId"));
+				if (this.divId == this.collection.models[a].get("divId")){
+					
+					this.collection.remove(this.model);
+					
+				}
+			}
+			this.model.set("divId", this.divId);
+			//
+			
+			
+			//
+			console.log("divId                   "+this.model.get("divId"));
+			
 			vars.cell = this.divId;
 			vars.depth = this.collection.getDepth();
 

@@ -234,13 +234,20 @@ define(
 									//TODO when backward, remove a div that is left.
 									//TODO when backward, improper link to next level down
 									// get cue from history
+									
+									for ( var aa in models) {
+										console.log("################## ############ divId "+ models[aa].get("divId"));
+									}
+									
 									for ( var a in Col.defaults) {
 
 										if (Col.defaults[a]["cellId"] != "r2c2"
 												&& Col.defaults[a]["cellId"] != lastCell) {
-											//in the case forward no problem
-											//but in the case backward: ignore the currentpage
+											
+											
+											//in the case backward: ignore the currentpage
 											if( !isBackward  || isBackward && Col.defaults[a]["cellId"] !=currentPage){
+											
 											Col.add(Col.defaults[a]);
 											
 											if(!dataModel.isDebug){

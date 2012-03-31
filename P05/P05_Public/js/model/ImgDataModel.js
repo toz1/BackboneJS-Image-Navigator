@@ -7,7 +7,7 @@ define([
   	
   	onChange: function(){
   		
-  		console.log("changing model: "+this.get('cellId'));
+  		console.log("changing model: "+this.get('divId'));
   		
   	},
 	initialize: function(){
