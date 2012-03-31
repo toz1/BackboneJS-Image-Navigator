@@ -1,0 +1,5 @@
+/.settings
+/.DS_Store
+/build.sh
+/compiler.jar
+/js.jar
