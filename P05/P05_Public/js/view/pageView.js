@@ -155,13 +155,15 @@ define([ 'jquery', 'underscore', 'backbone',
 					//TODO see if I can always add DIV, and not replace
 					//TODO once the binding of the removing of the model and the removing of the html DIV
 					// is implemented: remove the replace mechanism
+					//TODO review this
 					if ($(availableDiv1[a]).attr("depth") == this.collection
 							.getDepth() - 1
 							&& this.collection.getDepth() < 5) {
-
-						this.el=$(availableDiv1[a]);
+						console.log("::1 "+$(availableDiv1[a]).attr("id"));
+						this.el = $("#"+$(availableDiv1[a]).attr("id"));
+						//this.el=$(availableDiv1[a]);
 						this.el.replaceWith(template);
-						this.setElement($(availableDiv1[a]));
+						this.setElement($("#"+$(availableDiv1[a]).attr("id")));
 						foundAvailDiv = true;
 						break;
 					}
@@ -170,9 +172,12 @@ define([ 'jquery', 'underscore', 'backbone',
 					var availableDiv2 = $("[data-role]='page'").filter("[depth]="+this.collection.getDepth()).filter(
 					":not(.ui-page-active)").filter(":not[id]=''");
 					for ( var a2 = 0; a2 < availableDiv2.length; a2++) {
-						this.el = $(availableDiv1[a]);
-						this.el.replaceWith(template);
-						this.setElement($(availableDiv1[a]));
+						console.log("::2 "+$(availableDiv2[a]).attr("id"));
+						console.log("::2 "+$(availableDiv2[a]).html());
+						//this.el = $("#"+$(availableDiv2[a]).attr("id"));
+						//this.el = $(availableDiv1[a]);
+						//this.el.replaceWith(template);
+						//this.setElement($("#"+$(availableDiv2[a]).attr("id")));
 						break;
 					}
 				}
@@ -180,6 +185,7 @@ define([ 'jquery', 'underscore', 'backbone',
 					console.log("this.collection.getDepth() >= 5  cell:  ====>>> "+ this.vars.cell);
 					this.el = $("#container");
 					this.el.append(template);
+					this.setElement($("#"+this.vars.cell));
 					}
 					
 
