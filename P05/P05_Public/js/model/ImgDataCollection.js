@@ -149,7 +149,26 @@ define(
 							// get the second to last (last being r2c2)
 							cArray.pop();
 							currentPage = cArray.pop();
+							//TODO: this does not work. Find the direction by another mean
+							console.log("CURRENT PAGE!!!!!!!!!!!!!!!!!! ::: "+currentPage);
+							switch(currentPage){
 							
+							case "r1c2":
+								transitionType = "slideUp";
+								
+								break;
+								
+							case "r3c2":
+								transitionType = "slideDown";
+								
+								break;	
+							
+							default:
+								transitionType = "slide";
+							
+							}
+							
+							/*
 							if (currentPage== "r1c2" || currentPage== "r3c2"){
 								
 								transitionType = "slideUp";
@@ -172,7 +191,7 @@ define(
 								
 							}
 							
-							
+							*/
 							}
 
 								if (typeof data.toPage === "string") {
@@ -180,7 +199,6 @@ define(
 									$(data.toPage).page();
 									$.mobile.changePage($(data.toPage), {
 										transition : transitionType,
-										reverse : isReverse,
 										allowSamePageTransition : true,
 										changeHash : false
 									});

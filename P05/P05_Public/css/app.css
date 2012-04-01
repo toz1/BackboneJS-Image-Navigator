@@ -136,12 +136,12 @@ width:100%;
 				
 				
 				
-.slideUp.in.reverse {
+.slideDown.in {
 				    -webkit-transform: translateY(0);
 				    -webkit-animation-name: slideinfrombottom;
 				}
 
-				.slideUp.out.reverse {
+				.slideDown.out {
 				    -webkit-transform: translateY(100%);
 				    -webkit-animation-name: slideouttotop;
 				}

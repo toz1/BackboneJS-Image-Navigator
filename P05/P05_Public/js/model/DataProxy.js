@@ -1,7 +1,6 @@
 define([
   'underscore',
-  'backbone',
-  'appConstants'
+  'backbone'
 ], function(_, Backbone, constants) {
   var DataProxy = Backbone.Model.extend({
   	
@@ -9,7 +8,7 @@ define([
 	  
   	words: ['apple','banana', 'horse', 'pinup', ' orange','head','dress', 'car','sport','plane','eat','work','shoes','leg','arm','apple','banana', 'horse', 'pinup', ' orange','head','dress', 'car','sport','plane','eat','work','shoes','leg','arm'],
 	 url: function() {
-		 if(isDebug){
+		 if(this.isDebug){
 		 return ".";
 		 } else {
 			 
