@@ -3,7 +3,41 @@ define([ 'jquery', 'underscore', 'backbone',
 	// Using ECMAScript 5 strict mode during development. By default r.js will ignore that.
 	"use strict";
 	var pageView = Backbone.View.extend({
+		  events: {
+			    "swiperight"                : "swiperightHandler",
+			    "swipeleft"         		: "swipeleftHandler",
+			    "swipeup"   				: "swipeupHandler",
+			    "swipedown"       			: "swipedownHandler",
+			    'click'						: 'clickHandler'
+			  },
+			  
+			  
+			  clickHandler : function () {
+				  
+				  console.log("### click ###");
+				  
+			  },
+				swiperightHandler : function() { 
 
+					document.location.href="#/page/"+this.vars.leftNav;
+					},
+					
+				swipeleftHandler : function() { 
+
+					document.location.href="#/page/"+this.vars.rightNav;
+						},
+
+					
+				swipeupHandler : function(e){
+
+					document.location.href="#/page/"+this.vars.bottomNav;
+					},
+					
+				swipedownHandler : function(e){
+
+					document.location.href="#/page/"+this.vars.topNav;
+						},
+			  
 
 		onModelRemove : function() {
 			console.log("removing view");
@@ -13,6 +47,8 @@ define([ 'jquery', 'underscore', 'backbone',
 			$("#"+this.divId).remove();
 
 		},
+		
+		vars : {},
 
 		render : function() {
 			console.log("rendering model with memory: "
@@ -25,7 +61,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			var realCurrentId = this.collection.getHistory()
 					+ this.model.get('cellId');
 
-			var vars = {};
 
 			//add "-r2c2" at the end of the id: every cell is meant to become center (r2c2),
 			//so if it's set now there is no need to update this value once they are displayed
@@ -35,7 +70,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			this.divId = realCurrentId + "-r2c2";
 			
-			// set the divId on the model so as to be able in the Collection to avoid generating doubles
 			console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ........... ?????? "+this.divId);
 			console.log("model cellId >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   "+this.model.get("cellId"));
 
@@ -51,6 +85,8 @@ define([ 'jquery', 'underscore', 'backbone',
 					
 				}
 			}
+			
+
 			this.model.set("divId", this.divId);
 			//
 			
@@ -58,19 +94,18 @@ define([ 'jquery', 'underscore', 'backbone',
 			//
 			console.log("divId                   "+this.model.get("divId"));
 			
-			vars.cell = this.divId;
-			vars.depth = this.collection.getDepth();
+			this.vars.cell = this.divId;
+			this.vars.depth = this.collection.getDepth();
 
-			console.log("vars.cell: ", vars.cell, "  depth: ", this.collection
+			console.log("vars.cell: ", this.vars.cell, "  depth: ", this.collection
 					.getDepth());
-			if(this.collection.getDepth()==1) console.log(" 1 !!!!!!!!!!!!!!!!!")
-			vars.url = this.model.get('imgUrl');
+			this.vars.url = this.model.get('imgUrl');
 
 			//define the links to the next pages
-			vars.topNav = realCurrentId + "-r1c2-r2c2";
-			vars.rightNav = realCurrentId + "-r2c3-r2c2";
-			vars.bottomNav = realCurrentId + "-r3c2-r2c2";
-			vars.leftNav = realCurrentId + "-r2c1-r2c2";
+			this.vars.topNav = realCurrentId + "-r1c2-r2c2";
+			this.vars.rightNav = realCurrentId + "-r2c3-r2c2";
+			this.vars.bottomNav = realCurrentId + "-r3c2-r2c2";
+			this.vars.leftNav = realCurrentId + "-r2c1-r2c2";
 
 			// change the link pointing to the page we are coming from 
 			//TODO keep memory of all pages visited
@@ -80,37 +115,42 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			switch(this.model.get('cellId')){
 			case "r1c2":
-				vars.bottomNav= prevLink;
+				this.vars.bottomNav= prevLink;
 				break;
 			case "r2c3":
-				vars.leftNav= prevLink;
+				this.vars.leftNav= prevLink;
 				break;
 			case "r3c2":
-				vars.topNav= prevLink;
+				this.vars.topNav= prevLink;
 				break;
 			case "r2c1":
-				vars.rightNav= prevLink;
+				this.vars.rightNav= prevLink;
 				break;
 			
 			};
 			
 			
-			//TODO and fixe going back when level == 2
 
-			var template = _.template(tpl, vars);
+			var template = _.template(tpl, this.vars);
+			
+			var alert = function () {
+				
+				console.log("alert")
+				
+			};
 
 			if (this.collection.getDepth() == 0) {
-				this.el = $("#" + vars.cell);
-
+				this.el =$("#" + this.vars.cell);
 				this.el.replaceWith(template);
-			} else {
+				this.setElement($("#" + this.vars.cell));
+			}
+			else {
 				var foundAvailDiv =false;
 				var availableDiv1 = $("[data-role]='page'").filter(
 						":not(.ui-page-active)").filter(":not[id]=''");
 
 				for ( var a = 0; a < availableDiv1.length; a++) {
 					console.log("  available div  ------>  " + availableDiv1[a].id);
-
 					// replace the existing div until all are replaced, then add new ones
 					//TODO see if I can always add DIV, and not replace
 					//TODO once the binding of the removing of the model and the removing of the html DIV
@@ -119,8 +159,9 @@ define([ 'jquery', 'underscore', 'backbone',
 							.getDepth() - 1
 							&& this.collection.getDepth() < 5) {
 
-						this.el = $(availableDiv1[a]);
+						this.el=$(availableDiv1[a]);
 						this.el.replaceWith(template);
+						this.setElement($(availableDiv1[a]));
 						foundAvailDiv = true;
 						break;
 					}
@@ -131,42 +172,46 @@ define([ 'jquery', 'underscore', 'backbone',
 					for ( var a2 = 0; a2 < availableDiv2.length; a2++) {
 						this.el = $(availableDiv1[a]);
 						this.el.replaceWith(template);
+						this.setElement($(availableDiv1[a]));
 						break;
 					}
 				}
 					if(!foundAvailDiv){
-					console.log("this.collection.getDepth() >= 5  cell:  ====>>> "+ vars.cell);
+					console.log("this.collection.getDepth() >= 5  cell:  ====>>> "+ this.vars.cell);
 					this.el = $("#container");
 					this.el.append(template);
 					}
+					
 
 			}
+			
 
-			this.el.swiperight(function() { 
+			
+			
+				$(this.el).swiperight(function() { 
 
-			document.location.href="#/page/"+vars.leftNav;
-			});
-			
-			this.el.swipeleft(function() { 
-
-			document.location.href="#/page/"+vars.rightNav;
-				});
-			
-			
-			
-			
-			this.el.swipeup(function() { 
-
-			document.location.href="#/page/"+vars.bottomNav;
-			});
-			
-			this.el.swipedown(function() { 
-
-			document.location.href="#/page/"+vars.topNav;
+				document.location.href="#/page/"+this.vars.leftNav;
 				});
 				
+				$(this.el).swipeleft(function() { 
+
+				document.location.href="#/page/"+this.vars.rightNav;
+					});
+
+				
+				$(this.el).bind('swipeup', function(e){
+
+				document.location.href="#/page/"+this.vars.bottomNav;
+				});
+				
+				$(this.el).bind('swipedown', function(e){
+
+				document.location.href="#/page/"+this.vars.topNav;
+					});
 			
-			this.trigger("pageRendered", vars.cell);
+			//
+			
+			this.trigger("pageRendered", this.vars.cell);
 
 		},
 		initialize : function() {
@@ -176,6 +221,90 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			//divId is the id of the html Div that is bound to occurrence this view
 			this.divId = "";
+			
+			// http://developingwithstyle.blogspot.com.es/2010/11/jquery-mobile-swipe-up-down-left-right.html	
+            
+            
+	         // initializes touch and scroll events
+			
+	            var supportTouch = $.support.touch,
+	                    scrollEvent = "touchmove scroll",
+	                    touchStartEvent = supportTouch ? "touchstart" : "mousedown",
+	                    touchStopEvent = supportTouch ? "touchend" : "mouseup",
+	                    touchMoveEvent = supportTouch ? "touchmove" : "mousemove";
+
+	     // handles swipeup and swipedown
+	            $.event.special.swipeupdown = {
+	                setup: function() {
+	                    var thisObject = this;
+	                    var $this = $(thisObject);
+
+	                    $this.bind(touchStartEvent, function(event) {
+	                        var data = event.originalEvent.touches ?
+	                                event.originalEvent.touches[ 0 ] :
+	                                event,
+	                                start = {
+	                                    time: (new Date).getTime(),
+	                                    coords: [ data.pageX, data.pageY ],
+	                                    origin: $(event.target)
+	                                },
+	                                stop;
+
+	                        function moveHandler(event) {
+	                            if (!start) {
+	                                return;
+	                            }
+
+	                            var data = event.originalEvent.touches ?
+	                                    event.originalEvent.touches[ 0 ] :
+	                                    event;
+	                            stop = {
+	                                time: (new Date).getTime(),
+	                                coords: [ data.pageX, data.pageY ]
+	                            };
+
+	                            // prevent scrolling
+	                            if (Math.abs(start.coords[1] - stop.coords[1]) > 10) {
+	                                event.preventDefault();
+	                            }
+	                        }
+
+	                        $this
+	                                .bind(touchMoveEvent, moveHandler)
+	                                .one(touchStopEvent, function(event) {
+	                            $this.unbind(touchMoveEvent, moveHandler);
+	                            if (start && stop) {
+	                                if (stop.time - start.time < 1000 &&
+	                                        Math.abs(start.coords[1] - stop.coords[1]) > 30 &&
+	                                        Math.abs(start.coords[0] - stop.coords[0]) < 75) {
+	                                    start.origin
+	                                            .trigger("swipeupdown")
+	                                            .trigger(start.coords[1] > stop.coords[1] ? "swipeup" : "swipedown");
+	                                }
+	                            }
+	                            start = stop = undefined;
+	                        });
+	                    });
+	                }
+	            };
+
+	    //Adds the events to the jQuery events special collection
+	            $.each({
+	                swipedown: "swipeupdown",
+	                swipeup: "swipeupdown"
+	            }, function(event, sourceEvent){
+	                $.event.special[event] = {
+	                    setup: function(){
+	                        $(this).bind(sourceEvent, $.noop);
+	                    }
+	                };
+	            });
+	/////////////////////////////////////////////////
+	            
+	     
+			
+					
+
 		}
 	});
 

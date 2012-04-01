@@ -124,7 +124,8 @@ define(
 										});
 										// event listened to in pageView. The url is assigned, now render the page
 										console.log("..........>> "+ m.get('cellId'));
-										m.trigger("renderEvent");
+										
+											m.trigger("renderEvent");
 										m.set("status", "hasUrl", {
 											silent : true
 										});
