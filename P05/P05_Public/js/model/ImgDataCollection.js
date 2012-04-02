@@ -136,10 +136,18 @@ define(
 							}
 
 						},
+						//direction of the slide movement (up,down,left,right), assigned by the router,
+						//or the functions handling the swipe.
+						setTransitionType : function(trstype){
+							console.log("hello transition type: " + trstype);
+							this.mvt = trstype;
+							console.log("this.mvt: " + this.mvt);
+						},
+						mvt : "",
 						
 						//triggered before the page change
 		                beforeChange : function(e, data) {
-		                	
+
 		                	var currentPage;
 		                	var transitionType;
 		                	var isReverse;
@@ -149,56 +157,13 @@ define(
 							// get the second to last (last being r2c2)
 							cArray.pop();
 							currentPage = cArray.pop();
-							//TODO: this does not work. Find the direction by another mean
-							console.log("CURRENT PAGE!!!!!!!!!!!!!!!!!! ::: "+currentPage);
-							switch(currentPage){
-							
-							case "r1c2":
-								transitionType = "slideUp";
-								
-								break;
-								
-							case "r3c2":
-								transitionType = "slideDown";
-								
-								break;	
-							
-							default:
-								transitionType = "slide";
-							
-							}
-							
-							/*
-							if (currentPage== "r1c2" || currentPage== "r3c2"){
-								
-								transitionType = "slideUp";
-								
-								
-							}
-							else {
-								transitionType = "slide";
-								
-							}
-							
-							if (currentPage== "r1c2" || currentPage== "r2c3"){
-								
-								isReverse = true;
-								
-								
-							}
-							else {
-								isReverse = false;
-								
-							}
-							
-							*/
 							}
 
 								if (typeof data.toPage === "string") {
-
+									console.log("  ............TRANSITION TYPE .... "+this.mvt);
 									$(data.toPage).page();
 									$.mobile.changePage($(data.toPage), {
-										transition : transitionType,
+										transition : this.mvt,
 										allowSamePageTransition : true,
 										changeHash : false
 									});
@@ -373,7 +338,10 @@ define(
 									.bind(this.successfunction, this);
 							fetchOptions.success = successfunction;
 
-							// 	
+							// 
+							// binding to get a reference to this inside the functions
+							this.beforeChange = _.bind(this.beforeChange, this);
+							
 							this.pageChangedHandler = _.bind(this.pageChangedHandler, this);
 
 							$(document).bind("pagechange",

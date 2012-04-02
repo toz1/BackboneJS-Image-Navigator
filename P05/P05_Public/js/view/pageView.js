@@ -12,9 +12,8 @@ define([ 'jquery', 'underscore', 'backbone',
 			  },
 			  
 			  
-			  clickHandler : function () {
-				  
-				  console.log("### click ###");
+			  clickHandler : function (e) {
+				  console.log("### click ### ");
 				  
 			  },
 				swiperightHandler : function() { 
@@ -165,19 +164,6 @@ define([ 'jquery', 'underscore', 'backbone',
 						this.el.replaceWith(template);
 						this.setElement($("#"+$(availableDiv1[a]).attr("id")));
 						foundAvailDiv = true;
-						break;
-					}
-				}
-				if(!foundAvailDiv){
-					var availableDiv2 = $("[data-role]='page'").filter("[depth]="+this.collection.getDepth()).filter(
-					":not(.ui-page-active)").filter(":not[id]=''");
-					for ( var a2 = 0; a2 < availableDiv2.length; a2++) {
-						console.log("::2 "+$(availableDiv2[a]).attr("id"));
-						console.log("::2 "+$(availableDiv2[a]).html());
-						//this.el = $("#"+$(availableDiv2[a]).attr("id"));
-						//this.el = $(availableDiv1[a]);
-						//this.el.replaceWith(template);
-						//this.setElement($("#"+$(availableDiv2[a]).attr("id")));
 						break;
 					}
 				}
