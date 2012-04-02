@@ -10,6 +10,7 @@ define(
 						// url:"http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=6a5342fd46df2623768be8ccfac1d723",
 						
 						model : ImgDataModel,
+						orientation : "landscape",
 						defaults : [ {
 							"cellId" : "r2c2",
 							"status" : "awaitUrl"
@@ -87,7 +88,26 @@ define(
 						},
 						// success getting the Flickr API
 						successfunction : function(model, data) {
-							var photo = data.photos.photo[0];
+							//select from the list the image with the correct orientation
+							var index = -1;
+							for (var a in data.photos.photo){
+								var ratio = (data.photos.photo[a].o_width)/(data.photos.photo[a].o_height);
+								if (this.orientation == "landscape" && ratio > 1){
+									
+								index = a;
+								break;
+									
+								} else if (this.orientation == "portrait" && ratio < 1){
+									
+									index = a;
+									break;	
+									
+									
+								}
+							}
+							if(index == -1)index = 0;
+							var photo = data.photos.photo[index];
+
 							// resolution available: z, b
 							var resolution = "b";
 							var imgUrl = "http://farm" + photo.farm
