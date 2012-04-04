@@ -170,12 +170,10 @@ define(
 		                	
 		
 							if (typeof data.toPage === "string") {
-									console.log("  ............TRANSITION TYPE3 .... "+data.toPage);
 									$(data.toPage).page();
-									console.log("  ............TRAN .... ");
 
 									$.mobile.changePage($(data.toPage), {
-										transition : "slide",
+										transition : this.mvt,
 										allowSamePageTransition : true,
 										changeHash : false
 									});
