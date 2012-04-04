@@ -16,7 +16,7 @@ define( ['order!jquery',
                 function1: function(mvt,id) {
                
                 var toDiv = "#" + id.toString();	
-                console.log("collection: "+this.collection+ "direction: "+mvt+" toDiv: "+ toDiv);
+                console.log("==== >>> collection: "+this.collection+ "direction: "+mvt+" toDiv: "+ toDiv);
                 //the changePage is intercepted by ImgDataCollection
                 //as I am customizing the page change, we cannot use data-direction
                 //in the html. So I pass the transition type directly to ImgDataCollection

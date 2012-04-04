@@ -1,17 +1,29 @@
 define([ 'jquery', 'underscore', 'backbone', 'view/pageView',
-		'model/ImgDataCollection' ], function($, _, Backbone, pageView,
-		imgDataCollection) {
+		'model/ImgDataCollection', 'router/appRouter' ], function($, _, Backbone, pageView,
+		imgDataCollection, _router) {
 	// Using ECMAScript 5 strict mode during development. By default r.js will ignore that.
 	"use strict";
 
 	var gridView = Backbone.View.extend({
+		router : {},
+		setRouter : function(r){
+			
+			this.router = r;
+			console.log("NAVIGATE "+ this.router);
+			// here because the view need to be ready to catch the add events
+			//View is ready, load images
+			this.collection.loadImg();
+		},
 		onAdd : function(m) {
+			console.log("ROUTER IN gridview: "+this.router);
 			var pView = new pageView({
 				model : m,
 				collection : this.collection,
+				//router : this.router,
 				id : m.get('cellId')
 			});
-
+			pView.setRouter(this.router);
+			//pView.router =  this.router;
 			pView.on("pageRendered", this.onPageRender);
 			// end pView.on("pageRendered"
 
@@ -24,10 +36,8 @@ define([ 'jquery', 'underscore', 'backbone', 'view/pageView',
 		},
 		initialize : function() {
 			this.collection.bind('add', this.onAdd, this);
+			console.log("rROUTER in GrisView: "+this.router);
 
-			// here because the view need to be ready to catch the add events
-			//View is ready, load images
-			this.collection.loadImg();
 
 		}
 	});

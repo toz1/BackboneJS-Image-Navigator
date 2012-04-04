@@ -167,23 +167,15 @@ define(
 						
 						//triggered before the page change
 		                beforeChange : function(e, data) {
-
-		                	var currentPage;
-		                	var transitionType;
-		                	var isReverse;
-							
-							if($(data.toPage).attr("id") != "r2c2"){
-							var cArray = $(data.toPage).attr("id").split("-");
-							// get the second to last (last being r2c2)
-							cArray.pop();
-							currentPage = cArray.pop();
-							}
-
-								if (typeof data.toPage === "string") {
-									console.log("  ............TRANSITION TYPE .... "+this.mvt);
+		                	
+		
+							if (typeof data.toPage === "string") {
+									console.log("  ............TRANSITION TYPE3 .... "+data.toPage);
 									$(data.toPage).page();
+									console.log("  ............TRAN .... ");
+
 									$.mobile.changePage($(data.toPage), {
-										transition : this.mvt,
+										transition : "slide",
 										allowSamePageTransition : true,
 										changeHash : false
 									});
@@ -194,6 +186,7 @@ define(
 		                },
 
 						pageChangedHandler : function(e, data) {
+							console.log("pageChangedHandler");
 							// get the id of the new page
 							var currentPage;
 							
@@ -208,10 +201,6 @@ define(
 								currentPage = "r2c2";
 								
 							}
-
-							
-							
-							
 							
 							// increment depth if we arrive on a new page, decrement if we are going back to the previous page
 							var newPageDepth = $(data.toPage).attr('depth');

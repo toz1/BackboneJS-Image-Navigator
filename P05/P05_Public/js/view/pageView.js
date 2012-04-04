@@ -3,38 +3,58 @@ define([ 'jquery', 'underscore', 'backbone',
 	// Using ECMAScript 5 strict mode during development. By default r.js will ignore that.
 	"use strict";
 	var pageView = Backbone.View.extend({
+		router : {},
 		  events: {
 			    "swiperight"                : "swiperightHandler",
 			    "swipeleft"         		: "swipeleftHandler",
 			    "swipeup"   				: "swipeupHandler",
 			    "swipedown"       			: "swipedownHandler",
-			    'click'						: 'clickHandler'
+			    "dblclick"						: 'clickHandler'
+			  },
+			  
+			  setRouter : function (r){
+				  
+				this.router = r;  
+				  
 			  },
 			  
 			  
 			  clickHandler : function (e) {
-				  console.log("### click ### ");
+				  console.log(this.model.get('cellId')+"### click ### "+ this.model.get("leftNav"));
+				 $(this.el).find('#txtView').html( this.vars.rightNav);
+				this.router.navigate("nav/slideLeft/"+this.model.get("leftNav"), {trigger: true});
 				  
 			  },
-				swiperightHandler : function() { 
+			swiperightHandler : function() { 
+					$(this.el).find('#txtView').html("swipe right");
 
-					document.location.href="#/page/"+this.vars.leftNav;
+					console.log("swipe right");
+					this.router.navigate("nav/slideRight/"+this.model.get("rightNav"), {trigger: true});
 					},
 					
 				swipeleftHandler : function() { 
+					$(this.el).find('#txtView').html("swipe left");
 
-					document.location.href="#/page/"+this.vars.rightNav;
+					console.log("swipe left");
+
+					this.router.navigate("nav/slideLeft/"+this.model.get("leftNav"), {trigger: true});
 						},
 
 					
 				swipeupHandler : function(e){
+					$(this.el).find('#txtView').html("swipe up");
 
-					document.location.href="#/page/"+this.vars.bottomNav;
+					console.log("swipe up");
+
+					this.router.navigate("nav/slideUp/"+this.model.get("topNav"), {trigger: true});
 					},
 					
 				swipedownHandler : function(e){
+					 $(this.el).find('#txtView').html("swipe down");
 
-					document.location.href="#/page/"+this.vars.topNav;
+					console.log("swipe down");
+
+					this.router.navigate("nav/slideDown/"+this.model.get("bottomNav"), {trigger: true});
 						},
 			  
 
@@ -105,6 +125,7 @@ define([ 'jquery', 'underscore', 'backbone',
 			this.vars.rightNav = realCurrentId + "-r2c3-r2c2";
 			this.vars.bottomNav = realCurrentId + "-r3c2-r2c2";
 			this.vars.leftNav = realCurrentId + "-r2c1-r2c2";
+			console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+this.model.get('cellId') +">>> this.vars.rightNav: "+this.vars.rightNav);
 
 			// change the link pointing to the page we are coming from 
 			//TODO keep memory of all pages visited
@@ -128,7 +149,10 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			};
 			
-			
+			this.model.set("bottomNav", this.vars.bottomNav);
+			this.model.set("leftNav", this.vars.leftNav);
+			this.model.set("topNav", this.vars.topNav);
+			this.model.set("rightNav", this.vars.rightNav);
 
 			var template = _.template(tpl, this.vars);
 			

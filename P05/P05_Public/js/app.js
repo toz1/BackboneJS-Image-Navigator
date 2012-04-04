@@ -19,10 +19,11 @@ define([
 
         	
         	var _imgDataC = new imgDataCollection;
+        	var _router = new AppRouter;
+           	_router.collection = _imgDataC;
         	var _gridView = new gridView({collection: _imgDataC});
-
-        	var _router = new AppRouter();
-        	_router.collection = _imgDataC;
+        	_gridView.setRouter(_router);
+ 
         	
         };
 
