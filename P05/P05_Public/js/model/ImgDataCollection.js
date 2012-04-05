@@ -167,11 +167,10 @@ define(
 						
 						//triggered before the page change
 		                beforeChange : function(e, data) {
-		                	
-		
+		                	console.log("mvt1: "+this.mvt);
 							if (typeof data.toPage === "string") {
 									$(data.toPage).page();
-
+									console.log("mvt2: "+this.mvt);
 									$.mobile.changePage($(data.toPage), {
 										transition : this.mvt,
 										allowSamePageTransition : true,

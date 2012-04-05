@@ -21,8 +21,10 @@ define([ 'jquery', 'underscore', 'backbone',
 			  
 			  clickHandler : function (e) {
 				  console.log(this.model.get('cellId')+"### click ### "+ this.model.get("leftNav"));
+				  console.log("### LEFT NAV ### "+ this.model.get("leftNav"));
+				  console.log("### RIGHT NAV ### "+ this.model.get("rightNav"));
 				 $(this.el).find('#txtView').html( this.vars.rightNav);
-				this.router.navigate("nav/slideLeft/"+this.model.get("leftNav"), {trigger: true});
+				this.router.navigate("nav/slideRight/"+this.model.get("leftNav"), {trigger: true});
 				  
 			  },
 			swiperightHandler : function() { 
@@ -200,30 +202,7 @@ define([ 'jquery', 'underscore', 'backbone',
 					
 
 			}
-			
 
-			
-			
-				$(this.el).swiperight(function() { 
-
-				document.location.href="#/page/"+this.vars.leftNav;
-				});
-				
-				$(this.el).swipeleft(function() { 
-
-				document.location.href="#/page/"+this.vars.rightNav;
-					});
-
-				
-				$(this.el).bind('swipeup', function(e){
-
-				document.location.href="#/page/"+this.vars.bottomNav;
-				});
-				
-				$(this.el).bind('swipedown', function(e){
-
-				document.location.href="#/page/"+this.vars.topNav;
-					});
 			
 			//
 			
