@@ -18,9 +18,28 @@ h1 {
 	
 }
 
+a {
+	
+	z-index: 10;
+	
+}
+
 .ui-content {
 padding:0;
+height:100%;
+display:table;
+}
 
+
+.ui-page {
+padding:0;
+height:100%;
+}
+
+img{
+position:relative;
+width:100%;
+z-index: 0;
 }
 
 #container {
@@ -29,10 +48,17 @@ height:100%;
 overflow: visible;
 }
 
-#imgHolder {
-text-align: center;
-padding-top: 55px;
-overflow: auto;
+#txtView {
+	
+position:absolute;
+z-index: 8;	
+	
+}
+
+#imContainer {
+display:table-cell;	
+vertical-align:middle;
+width:100%;
 }
 
 #imgNav {
