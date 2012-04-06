@@ -120,7 +120,7 @@ define([ 'jquery', 'underscore', 'backbone',
 
 			console.log("vars.cell: ", this.vars.cell, "  depth: ", this.collection
 					.getDepth());
-			this.vars.url = this.model.get('imgUrl');
+			
 
 			//define the links to the next pages
 			this.vars.topNav = realCurrentId + "-r1c2-r2c2";
@@ -157,12 +157,7 @@ define([ 'jquery', 'underscore', 'backbone',
 			this.model.set("rightNav", this.vars.rightNav);
 
 			var template = _.template(tpl, this.vars);
-			
-			var alert = function () {
-				
-				console.log("alert")
-				
-			};
+		
 
 			if (this.collection.getDepth() == 0) {
 				this.el =$("#" + this.vars.cell);
@@ -200,14 +195,61 @@ define([ 'jquery', 'underscore', 'backbone',
 					this.setElement($("#"+this.vars.cell));
 					}
 					
+					
+
+					
 
 			}
+			
+			
+			// add a load complete listener to the images
+			//this.vars.url = this.model.get('imgUrl');
+			var image = new Image();
+
+//			var imgTag = $("img","#imContainer","#" + this.vars.cell);
+			
+			var imgTag = $("#imContainer","#" + this.vars.cell);
+			
+			console.log("???? : === >> "+imgTag.html());
+
+			
+			console.log("cell: ====================================================== >> "+this.vars.cell);
+
+			console.log("html1: === >> "+imgTag.parent().parent().html());
+			console.log("SCR1: === >> "+$("img",imgTag).attr('src'));
+			
+			//
+			//this.beforeChange = _.bind(this.beforeChange, this);
+			var cell = this.vars.cell;
+			
+			image.onload = function(){
+				
+				console.log('Image Loaded!!!');
+				$(imgTag).find("img").replaceWith(image);
+				console.log("html2: === >> "+imgTag.html());
+				console.log("SCR2: === >> "+$("img",imgTag).attr('src'));
+				console.log(">>>>  > > > this.vars.cell ... "+cell);
+				if(cell == "r2c2-r2c2"){$.mobile.initializePage();}
+				
+				//TODO display the links once the images are loaded
+				//else if(vars.cell == model.get("bottomNav")){
+					
+				//	$('#navBottom').css("display:block");
+					
+				//}
+			};
+			image.src = this.model.get('imgUrl');
 
 			
 			//
 			
 			this.trigger("pageRendered", this.vars.cell);
 
+		},
+		imgOnLoad : function(){
+			
+			
+			
 		},
 		initialize : function() {
 			this.model.on("remove", this.onModelRemove, this);

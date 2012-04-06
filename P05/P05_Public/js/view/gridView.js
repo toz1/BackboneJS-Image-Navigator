@@ -9,13 +9,11 @@ define([ 'jquery', 'underscore', 'backbone', 'view/pageView',
 		setRouter : function(r){
 			
 			this.router = r;
-			console.log("NAVIGATE "+ this.router);
 			// here because the view need to be ready to catch the add events
 			//View is ready, load images
 			this.collection.loadImg();
 		},
 		onAdd : function(m) {
-			console.log("ROUTER IN gridview: "+this.router);
 			var pView = new pageView({
 				model : m,
 				collection : this.collection,
@@ -36,7 +34,7 @@ define([ 'jquery', 'underscore', 'backbone', 'view/pageView',
 		},
 		initialize : function() {
 			this.collection.bind('add', this.onAdd, this);
-			console.log("rROUTER in GrisView: "+this.router);
+			console.log("rROUTER in GridView: "+this.router);
 
 
 		}

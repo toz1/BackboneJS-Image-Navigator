@@ -14,6 +14,7 @@ define([
             $.mobile.pushStateEnabled = false;
             
             //wait for the pages to be ready before initializing
+            // initialization is done in pageView image.onload()
             $.mobile.autoInitializePage = false;
 
         	var _imgDataC = new imgDataCollection;
