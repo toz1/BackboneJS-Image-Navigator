@@ -51,7 +51,16 @@ define(
 							
 						},
 						memorize: function(c){
-						
+						console.log("MEMORIZING: "+c);
+						if(c == "r2-c2"){
+						// case for the first page where r2c2 has already
+						// been rendered in	assignUrl(), but the other models
+						// still needs to be rendered	
+						for ( var imgMd in this.models) {
+							var m2 = this.models[imgMd];
+							if (m2.get('cellId') != "r2c2")m2.trigger("renderEvent");	
+						}
+						}
 						memory = memory  + c + "-";
 
 						
@@ -127,11 +136,7 @@ define(
 
 							// iterate through the model and give them an imgUrl
 							// if they don't have one
-							
-							for ( var i in this.models) {
-								console.log("cellID ..........>> "+ this.models[i].get('cellId')+"   status: "+this.models[i].get("status"));	
-								
-							}
+	
 
 							for ( var imgModel in this.models) {
 								var m = this.models[imgModel];
@@ -142,9 +147,16 @@ define(
 											silent : true
 										});
 										// event listened to in pageView. The url is assigned, now render the page
-										console.log("..........>> "+ m.get('cellId'));
+										console.log("ImgDataCollection .....>> "+ m.get('cellId'));
 										
+											if(isFirstPage){
+											// case for the first page that will be rendered first
+											// the other models will be rendered from the memorize()
+												if (m.get('cellId') == "r2c2")m.trigger("renderEvent");
+											}else{
+											// in other cases, render all models	
 											m.trigger("renderEvent");
+											}
 										m.set("status", "hasUrl", {
 											silent : true
 										});
@@ -153,6 +165,8 @@ define(
 								}
 
 							}
+							
+							isFirstPage = false;
 
 						},
 						//direction of the slide movement (up,down,left,right), assigned by the router,
@@ -290,12 +304,8 @@ define(
 
 									}
 							
-							}// end if(!isFirstPage)
+							}// end 
 
-							else {
-								console.log("CURRENT PAGE "+currentPage);
-								isFirstPage = false;
-							}
 						},// end pageChangeHAndler
 						oppositeCell : function(c){
 							

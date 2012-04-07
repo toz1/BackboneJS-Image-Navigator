@@ -82,7 +82,7 @@ define([ 'jquery', 'underscore', 'backbone',
 			var realCurrentId = this.collection.getHistory()
 					+ this.model.get('cellId');
 
-
+			console.log("REAL CURRENT ID: "+realCurrentId);
 			//add "-r2c2" at the end of the id: every cell is meant to become center (r2c2),
 			//so if it's set now there is no need to update this value once they are displayed
 			//(the visible page always ends by r2c2, the naming of the target pages is an anticipation
@@ -215,7 +215,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			console.log("cell: ====================================================== >> "+this.vars.cell);
 
-			console.log("html1: === >> "+imgTag.parent().parent().html());
 			console.log("SCR1: === >> "+$("img",imgTag).attr('src'));
 			
 			//
@@ -224,13 +223,11 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			image.onload = function(){
 				
-				console.log('Image Loaded!!!');
 				$(imgTag).find("img").replaceWith(image);
-				console.log("html2: === >> "+imgTag.html());
-				console.log("SCR2: === >> "+$("img",imgTag).attr('src'));
-				console.log(">>>>  > > > this.vars.cell ... "+cell);
+				console.log("IMAGE LOADED!!!!!!!!!!    >>>>  > > > this.vars.cell ... "+cell);
 				if(cell == "r2c2-r2c2"){$.mobile.initializePage();}
 				
+				//XXX
 				//TODO display the links once the images are loaded
 				//else if(vars.cell == model.get("bottomNav")){
 					
