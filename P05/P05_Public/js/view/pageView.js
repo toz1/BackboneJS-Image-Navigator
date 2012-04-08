@@ -72,6 +72,7 @@ define([ 'jquery', 'underscore', 'backbone',
 		vars : {},
 
 		render : function() {
+			//var model = this.model;
 			console.log("rendering model with memory: "
 					+ this.collection.getHistory());
 
@@ -220,22 +221,21 @@ define([ 'jquery', 'underscore', 'backbone',
 			//
 			//this.beforeChange = _.bind(this.beforeChange, this);
 			var cell = this.vars.cell;
+			var model = this.model;
 			
 			image.onload = function(){
-				
+				model.set("imgLoaded", true, {
+					silent : false
+				});
+				//model.trigger("imgLoadedEvent", model);
 				$(imgTag).find("img").replaceWith(image);
-				console.log("IMAGE LOADED!!!!!!!!!!    >>>>  > > > this.vars.cell ... "+cell);
+				console.log("IMAGE LOADED!!!!!!!!!!    >>>>  > > > this.vars.cell ... "+model.get("divId"));
 				if(cell == "r2c2-r2c2"){$.mobile.initializePage();}
 				
-				//XXX
-				//TODO display the links once the images are loaded
-				//else if(vars.cell == model.get("bottomNav")){
-					
-				//	$('#navBottom').css("display:block");
-					
-				//}
+	
 			};
-			image.src = this.model.get('imgUrl');
+			console.log(">>>> URL "+model.get('imgUrl'));
+			image.src = model.get('imgUrl');
 
 			
 			//
@@ -243,15 +243,50 @@ define([ 'jquery', 'underscore', 'backbone',
 			this.trigger("pageRendered", this.vars.cell);
 
 		},
-		imgOnLoad : function(){
+		newImgLoaded : function(id){
+			
+			console.log("=================IMAGE ID !!!!!!!!!!!!!!!!!!!!!!!!!  "+id);
+
+			
+			var mm = this.model;
+			
+			//XXX
+			//TODO display the links once the images are loaded
+			//else if(vars.cell == model.get("bottomNav")){
+				
+			//	$('#navBottom').css("display:block");
+				
+			//}
+			
+			//if (mm.get('bottomNav') == id || mm.get('leftNav') == id || mm.get('topNav') == id || mm.get('rightNav') == id){			
+			switch(id){
 			
 			
+			case mm.get('bottomNav'):
+				console.log("=================???? !!!!!! BOTTMOM NOF  css: "+$('#navTop').css("display"));
+				$('#navBottom').css("display","block");
+				break;
+			
+			case mm.get('leftNav'):
+				$('#navLeft').css("display","block");
+				break;
+			case mm.get('topNav'):
+				$('#navTop').css("display","block");
+				break;
+			case mm.get('rightNav'):
+				$('#navRight').css("display","block");
+				break;
+				
+			
+			}
 			
 		},
 		initialize : function() {
 			this.model.on("remove", this.onModelRemove, this);
 			this.model.on("idChange", this.onIdChange, this);
 			this.model.on("renderEvent", this.render, this);
+			this.model.on("newImgLoaded", this.newImgLoaded, this);
+			
 			
 			//divId is the id of the html Div that is bound to occurrence this view
 			this.divId = "";

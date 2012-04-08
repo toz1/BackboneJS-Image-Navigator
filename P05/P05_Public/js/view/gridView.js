@@ -11,7 +11,7 @@ define([ 'jquery', 'underscore', 'backbone', 'view/pageView',
 			this.router = r;
 			// here because the view need to be ready to catch the add events
 			//View is ready, load images
-			this.collection.loadImg();
+			this.collection.loadImgs();
 		},
 		onAdd : function(m) {
 			var pView = new pageView({

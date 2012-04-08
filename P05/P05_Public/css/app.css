@@ -71,28 +71,28 @@ width:100%;
 position:fixed;
 top: 50px;	
 left: 50%;	
-//display:none;	
+display:none;	
 }
 
 #navLeft {
 position:fixed;
 top: 50%;	
 left: 0;
-//display:none;		
+display:none;		
 }
 
 #navBottom {
 position:fixed;
 top: 90%;	
 left: 50%;
-//display:none;	
+display:none;	
 }
 
 #navRight {
 position:fixed;
 top: 50%;	
 left: 90%;
-//display:none;		
+display:none;		
 }
 
 .slideLeft.in {
