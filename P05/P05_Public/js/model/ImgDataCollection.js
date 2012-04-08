@@ -88,11 +88,10 @@ define(
 					this.add(this.defaults);
 
 					// fetch the images attributes from Flickr
-
+					console.log("LOAD IMAGES");
 					for ( var a in this.models) {
+						console.log("status: "+this.models[a].get("status"));
 						if (this.models[a].get("status") == "awaitUrl") {
-							
-							this.models[a].on ('change', this.modelImgLoaded, this);
 							
 							if(!dataModel.isDebug){
 								dataModel.fetch(fetchOptions);
@@ -157,6 +156,9 @@ define(
 								m.set("status", "hasUrl", {
 									silent : true
 								});
+								
+								//add an eventListener to update the links in view when the image will actually be loaded
+								m.on ('imgLoadedEvent', this.modelImgLoaded, this);
 								// event listened to in pageView. The url is assigned, now render the page
 								console.log("ImgDataCollection .....>> "+ m.get('cellId'));
 								console.log("ImgDataCollection ...assignedUrl..>> "+ assignedUrl);
@@ -181,7 +183,7 @@ define(
 								else{
 									// in other cases, render all models
 									console.log("..NO..")
-									//m.trigger("renderEvent");
+									m.trigger("renderEvent");
 								}
 								
 								break;
@@ -316,7 +318,7 @@ define(
 								if( !isBackward  || isBackward && Col.defaults[a]["cellId"] !=currentPage){
 
 									Col.add(Col.defaults[a]);
-
+									
 									if(!dataModel.isDebug){
 										dataModel.fetch(fetchOptions);
 									} else {

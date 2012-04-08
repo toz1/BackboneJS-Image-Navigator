@@ -156,6 +156,8 @@ define([ 'jquery', 'underscore', 'backbone',
 			this.model.set("leftNav", this.vars.leftNav);
 			this.model.set("topNav", this.vars.topNav);
 			this.model.set("rightNav", this.vars.rightNav);
+			
+
 
 			var template = _.template(tpl, this.vars);
 		
@@ -195,12 +197,50 @@ define([ 'jquery', 'underscore', 'backbone',
 					this.el.append(template);
 					this.setElement($("#"+this.vars.cell));
 					}
-					
-					
-
-					
-
 			}
+			
+
+			//check if the image of the target of the nav is already loaded
+			
+			var vars = this.vars;
+			//TODO condense this
+			for (var b in this.collection.models){
+				var tmId = this.collection.models[b].get("divId");
+				console.log("fffffffff "+ tmId);
+				if (tmId == this.vars.bottomNav && this.collection.models[b].get("imgLoaded") == true){
+					console.log("model"+this.model.get("divId")+"  "+tmId+"  1hhhhhhhhhhhhhhhHHHHHHHHHHHHHHHHHHHHHHHHHAAA "+this.vars.bottomNav);
+					//this.collection.models[b].trigger("displayLinkEvent",this.collection.models[b].get("divId"));
+					//this.collection.models[b].displayLink(tmId);
+					this.displayLink(this.vars.bottomNav);
+				}
+				
+				if (tmId == this.vars.topNav && this.collection.models[b].get("imgLoaded") == true){
+					console.log("model"+this.model.get("divId")+"  "+tmId+"  2hhhhhhhhhhhhhhhHHHHHHHHHHHHHHHHHHHHHHHHHAAA "+this.vars.bottomNav);
+					//this.collection.models[b].trigger("displayLinkEvent",this.collection.models[b].get("divId"));
+					//this.collection.models[b].displayLink(tmId);
+					this.displayLink(this.vars.topNav);
+				}
+				
+				if (tmId == this.vars.leftNav && this.collection.models[b].get("imgLoaded") == true){
+					console.log("model"+this.model.get("divId")+"  "+tmId+"  3hhhhhhhhhhhhhhhHHHHHHHHHHHHHHHHHHHHHHHHHAAA "+this.vars.bottomNav);
+					//this.collection.models[b].trigger("displayLinkEvent",this.collection.models[b].get("divId"));
+					//this.collection.models[b].displayLink(tmId);
+					this.displayLink(this.vars.leftNav);
+
+				}
+				
+				if (tmId == this.vars.rightNav && this.collection.models[b].get("imgLoaded") == true){
+					console.log("model"+this.model.get("divId")+"  "+tmId+"  4hhhhhhhhhhhhhhhHHHHHHHHHHHHHHHHHHHHHHHHHAAA "+this.vars.bottomNav);
+					//this.collection.models[b].trigger("displayLinkEvent",this.collection.models[b].get("divId"));
+					//this.collection.models[b].displayLink(tmId);
+					this.displayLink(this.vars.rightNav);
+
+				}
+				
+			}
+			
+			//var targetModel = _.filter(this.collection.models, function(m){ return (m.get("divId") == vars.rightNav
+			//
 			
 			
 			// add a load complete listener to the images
@@ -225,9 +265,9 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			image.onload = function(){
 				model.set("imgLoaded", true, {
-					silent : false
+					silent : true
 				});
-				//model.trigger("imgLoadedEvent", model);
+				model.trigger("imgLoadedEvent", model);
 				$(imgTag).find("img").replaceWith(image);
 				console.log("IMAGE LOADED!!!!!!!!!!    >>>>  > > > this.vars.cell ... "+model.get("divId"));
 				if(cell == "r2c2-r2c2"){$.mobile.initializePage();}
@@ -247,45 +287,55 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			console.log("=================IMAGE ID !!!!!!!!!!!!!!!!!!!!!!!!!  "+id);
 
-			
-			var mm = this.model;
+			this.displayLink(id);
 			
 			//XXX
 			//TODO display the links once the images are loaded
-			//else if(vars.cell == model.get("bottomNav")){
-				
-			//	$('#navBottom').css("display:block");
-				
-			//}
 			
-			//if (mm.get('bottomNav') == id || mm.get('leftNav') == id || mm.get('topNav') == id || mm.get('rightNav') == id){			
-			switch(id){
+		},
+		
+		displayLink : function(link){
+			
+			console.log("***DISPLAY LINK2*** "+ this.model.get('divId')+"    link: "+link
+					+"  m.get('leftNav') "+ this.model.get('leftNav')
+					+"  m.get('rightNav') "+ this.model.get('rightNav')
+					+"  m.get('topNav') "+ this.model.get('topNav')
+					+"  m.get('bottomNav') "+ this.model.get('bottomNav')
+			
+			);
 			
 			
-			case mm.get('bottomNav'):
-				console.log("=================???? !!!!!! BOTTMOM NOF  css: "+$('#navTop').css("display"));
-				$('#navBottom').css("display","block");
+			var m = this.model;
+			
+			
+			switch(link){
+			
+			
+			case m.get('bottomNav'):
+				$('#navBottom','#'+m.get("divId")).css("display","block");
 				break;
 			
-			case mm.get('leftNav'):
-				$('#navLeft').css("display","block");
+			case m.get('leftNav'):
+				$('#navLeft','#'+m.get("divId")).css("display","block");
 				break;
-			case mm.get('topNav'):
-				$('#navTop').css("display","block");
+			case m.get('topNav'):
+				$('#navTop','#'+m.get("divId")).css("display","block");
 				break;
-			case mm.get('rightNav'):
-				$('#navRight').css("display","block");
+			case m.get('rightNav'):
+				$('#navRight','#'+m.get("divId")).css("display","block");
 				break;
 				
 			
 			}
 			
 		},
+		
 		initialize : function() {
 			this.model.on("remove", this.onModelRemove, this);
 			this.model.on("idChange", this.onIdChange, this);
 			this.model.on("renderEvent", this.render, this);
 			this.model.on("newImgLoaded", this.newImgLoaded, this);
+			this.model.on("displayLinkEvent", this.displayLink2, this);
 			
 			
 			//divId is the id of the html Div that is bound to occurrence this view
