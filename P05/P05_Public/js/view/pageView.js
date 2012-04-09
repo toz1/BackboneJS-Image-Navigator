@@ -9,7 +9,7 @@ define([ 'jquery', 'underscore', 'backbone',
 			    "swipeleft"         		: "swipeleftHandler",
 			    "swipeup"   				: "swipeupHandler",
 			    "swipedown"       			: "swipedownHandler",
-			    "dblclick"						: 'clickHandler'
+			    "dblclick"					: 'dblclickHandler'
 			  },
 			  
 			  setRouter : function (r){
@@ -19,19 +19,21 @@ define([ 'jquery', 'underscore', 'backbone',
 			  },
 			  
 			  
-			  clickHandler : function (e) {
+			  dblclickHandler : function (e) {
 				  console.log(this.model.get('cellId')+"### click ### "+ this.model.get("leftNav"));
 				  console.log("### LEFT NAV ### "+ this.model.get("leftNav"));
 				  console.log("### RIGHT NAV ### "+ this.model.get("rightNav"));
-				 $(this.el).find('#txtView').html( this.vars.rightNav);
-				this.router.navigate("nav/slideRight/"+this.model.get("leftNav"), {trigger: true});
+				  var txt = $('#navLeft',this.el).css("display");
+				  alert(txt);
+				 $(this.el).find('#txtView').html(txt);
+				//this.router.navigate("nav/slideRight/"+this.model.get("leftNav"), {trigger: true});
 				  
 			  },
 			swiperightHandler : function() { 
 					$(this.el).find('#txtView').html("swipe right");
 
 					console.log("swipe right");
-					this.router.navigate("nav/slideRight/"+this.model.get("rightNav"), {trigger: true});
+					if($('#navLeft',this.el).css("display","block"))this.router.navigate("nav/slideRight/"+this.model.get("leftNav"), {trigger: true});
 					},
 					
 				swipeleftHandler : function() { 
@@ -39,7 +41,7 @@ define([ 'jquery', 'underscore', 'backbone',
 
 					console.log("swipe left");
 
-					this.router.navigate("nav/slideLeft/"+this.model.get("leftNav"), {trigger: true});
+					if($('#navRight',this.el).css("display","block"))this.router.navigate("nav/slideLeft/"+this.model.get("rightNav"), {trigger: true});
 						},
 
 					
@@ -47,8 +49,7 @@ define([ 'jquery', 'underscore', 'backbone',
 					$(this.el).find('#txtView').html("swipe up");
 
 					console.log("swipe up");
-
-					this.router.navigate("nav/slideUp/"+this.model.get("topNav"), {trigger: true});
+					if($('#navBottom',this.el).css("display","block"))this.router.navigate("nav/slideUp/"+this.model.get("bottomNav"), {trigger: true});
 					},
 					
 				swipedownHandler : function(e){
@@ -56,7 +57,7 @@ define([ 'jquery', 'underscore', 'backbone',
 
 					console.log("swipe down");
 
-					this.router.navigate("nav/slideDown/"+this.model.get("bottomNav"), {trigger: true});
+					if($('#navTop',this.el).css("display","block"))this.router.navigate("nav/slideDown/"+this.model.get("topNav"), {trigger: true});
 						},
 			  
 
@@ -295,7 +296,6 @@ define([ 'jquery', 'underscore', 'backbone',
 		},
 		
 		displayLink : function(link){
-			
 			console.log("***DISPLAY LINK2*** "+ this.model.get('divId')+"    link: "+link
 					+"  m.get('leftNav') "+ this.model.get('leftNav')
 					+"  m.get('rightNav') "+ this.model.get('rightNav')
