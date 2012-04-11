@@ -91,7 +91,10 @@ define([ 'jquery', 'underscore', 'backbone',
 			// so as not to have to chance the id once it's displayed)
 			// set the divId on the model so as to be able in the Collection to avoid generating doubles
 			
+			//this.divId = realCurrentId == "r2c2-r2c2" ? "r2c2-r2c2" : realCurrentId + "-r2c2";
+			
 			this.divId = realCurrentId + "-r2c2";
+			
 			
 			console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ........... ?????? "+this.divId);
 			console.log("model cellId >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   "+this.model.get("cellId"));
@@ -101,7 +104,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			//check if divId already exists
 			for ( var a in this.collection.models) {
-				console.log("divId "+ this.collection.models[a].get("divId"));
 				if (this.divId == this.collection.models[a].get("divId")){
 					
 					this.collection.remove(this.model);
@@ -288,15 +290,17 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			console.log("=================IMAGE ID !!!!!!!!!!!!!!!!!!!!!!!!!  "+id);
 
+			if(this.model.get('divId') != "" && this.model.get('divId')!= id){
 			this.displayLink(id);
-			
+			}
 			//XXX
 			//TODO display the links once the images are loaded
 			
 		},
 		
 		displayLink : function(link){
-			console.log("***DISPLAY LINK2*** "+ this.model.get('divId')+"    link: "+link
+			
+			console.log("***DISPLAY LINK2***"+ this.model.get('divId')+"<    link: "+link
 					+"  m.get('leftNav') "+ this.model.get('leftNav')
 					+"  m.get('rightNav') "+ this.model.get('rightNav')
 					+"  m.get('topNav') "+ this.model.get('topNav')
@@ -312,6 +316,7 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			
 			case m.get('bottomNav'):
+				console.log("CSS "+$('#navBottom','#'+m.get("divId")).css("display"));
 				$('#navBottom','#'+m.get("divId")).css("display","block");
 				break;
 			
@@ -335,7 +340,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			this.model.on("idChange", this.onIdChange, this);
 			this.model.on("renderEvent", this.render, this);
 			this.model.on("newImgLoaded", this.newImgLoaded, this);
-			this.model.on("displayLinkEvent", this.displayLink2, this);
 			
 			
 			//divId is the id of the html Div that is bound to occurrence this view

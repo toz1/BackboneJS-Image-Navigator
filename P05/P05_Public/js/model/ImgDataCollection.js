@@ -52,10 +52,32 @@ define(
 				},
 				memorize: function(c){
 					console.log("MEMORIZING: "+c);
-
 					memory = memory  + c + "-";
+					
+				
+							// case for the first page where r2c2 has already
+							// been rendered in	assignUrl(), but the other models
+							// still needs to be rendered	
+					
+					console.log("renderAll0");
+
+						this.renderAll();
+						
+					
 
 
+				},
+				
+				renderAll : function () {
+					console.log("renderAll:"+ memory+"<");
+
+						if (memory =="r2c2-" && assignedUrl == 5){
+												for ( var imgMd in models) {
+								var m2 = models[imgMd];
+								// the divId will be attibuted in the view render()
+								if(m2.get("divId") == "")m2.trigger("renderEvent");	
+						}		}
+					
 				},
 
 				forgetLastStep: function(){
@@ -94,6 +116,7 @@ define(
 						if (this.models[a].get("status") == "awaitUrl") {
 							
 							if(!dataModel.isDebug){
+								console.log("fetch");
 								dataModel.fetch(fetchOptions);
 							} else {
 								this.localDebug();
@@ -104,6 +127,7 @@ define(
 				// success getting the Flickr API
 				successfunction : function(model, data) {
 					//select from the list the image with the correct orientation
+					console.log("success function");
 					var index = -1;
 					for (var a in data.photos.photo){
 						var ratio = (data.photos.photo[a].o_width)/(data.photos.photo[a].o_height);
@@ -147,7 +171,7 @@ define(
 
 					for ( var imgModel in this.models) {
 						var m = this.models[imgModel];
-						if (!m.has("imgUrl")) {
+						if (m.get("imgUrl") == "") {
 
 							if (m.get("status") == "awaitUrl") {
 								m.set("imgUrl", imgUrl, {
@@ -161,24 +185,18 @@ define(
 								m.on ('imgLoadedEvent', this.modelImgLoaded, this);
 								// event listened to in pageView. The url is assigned, now render the page
 								console.log("ImgDataCollection .....>> "+ m.get('cellId'));
-								console.log("ImgDataCollection ...assignedUrl..>> "+ assignedUrl);
+								
 								assignedUrl ++;
-
+								console.log("ImgDataCollection ...assignedUrl..>> "+ assignedUrl);
 								if(assignedUrl < 5 ){
 									// case for the first page that will be rendered first
 									if (m.get('cellId') == "r2c2")m.trigger("renderEvent");
-								}
-								
-								else if (assignedUrl ==5){
-										// case for the first page where r2c2 has already
-										// been rendered in	assignUrl(), but the other models
-										// still needs to be rendered	
-										for ( var imgMd in models) {
-											var m2 = models[imgMd];
-											if (m2.get('cellId') != "r2c2")m2.trigger("renderEvent");	
-									}									
+								} else if (assignedUrl == 5){
+									console.log("renderAll1");
+									this.renderAll();
 									
 								}
+
 								
 								else{
 									// in other cases, render all models
@@ -250,9 +268,9 @@ define(
 					if (newPageDepth == depth){
 						//case moving forward
 						isBackward = false;
-						this.memorize(currentPage);
 						depth ++;
-						console.log("--> going forward");
+						this.memorize(currentPage);
+						console.log("--> going forward depth: "+depth);
 					} else if (newPageDepth == depth-2){
 						//case moving backward
 						isBackward = true;
