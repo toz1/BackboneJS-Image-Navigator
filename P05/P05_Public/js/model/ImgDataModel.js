@@ -21,7 +21,6 @@ define([
 	  
   	onChange: function(){
   		
-  		console.log("changing model: "+this.get('divId'));
   		
   	},
 	initialize: function(){

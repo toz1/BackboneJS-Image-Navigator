@@ -51,7 +51,6 @@ define(
 
 				},
 				memorize: function(c){
-					console.log("MEMORIZING: "+c);
 					memory = memory  + c + "-";
 					
 				
@@ -59,7 +58,6 @@ define(
 							// been rendered in	assignUrl(), but the other models
 							// still needs to be rendered	
 					
-					console.log("renderAll0");
 
 						this.renderAll();
 						
@@ -69,7 +67,6 @@ define(
 				},
 				
 				renderAll : function () {
-					console.log("renderAll:"+ memory+"<");
 
 						if (memory =="r2c2-" && assignedUrl == 5){
 												for ( var imgMd in models) {
@@ -90,7 +87,6 @@ define(
 				,
 				
 				modelImgLoaded : function (m){
-					console.log("!!!!!  modelImgLoaded: "+m.get("divId"));
 
 					var id = m.get("divId");
 					for ( var a in this.models) {
@@ -110,13 +106,10 @@ define(
 					this.add(this.defaults);
 
 					// fetch the images attributes from Flickr
-					console.log("LOAD IMAGES");
 					for ( var a in this.models) {
-						console.log("status: "+this.models[a].get("status"));
 						if (this.models[a].get("status") == "awaitUrl") {
 							
 							if(!dataModel.isDebug){
-								console.log("fetch");
 								dataModel.fetch(fetchOptions);
 							} else {
 								this.localDebug();
@@ -127,7 +120,6 @@ define(
 				// success getting the Flickr API
 				successfunction : function(model, data) {
 					//select from the list the image with the correct orientation
-					console.log("success function");
 					var index = -1;
 					for (var a in data.photos.photo){
 						var ratio = (data.photos.photo[a].o_width)/(data.photos.photo[a].o_height);
@@ -147,8 +139,8 @@ define(
 					if(index == -1)index = 0;
 					var photo = data.photos.photo[index];
 
-					// resolution available: z, b
-					var resolution = "b";
+					// resolution available: mstzb
+					var resolution = "z";
 					var imgUrl = "http://farm" + photo.farm
 					+ ".staticflickr.com/" + photo.server + "/"
 					+ photo.id + "_" + photo.secret + "_"
@@ -184,15 +176,12 @@ define(
 								//add an eventListener to update the links in view when the image will actually be loaded
 								m.on ('imgLoadedEvent', this.modelImgLoaded, this);
 								// event listened to in pageView. The url is assigned, now render the page
-								console.log("ImgDataCollection .....>> "+ m.get('cellId'));
 								
 								assignedUrl ++;
-								console.log("ImgDataCollection ...assignedUrl..>> "+ assignedUrl);
 								if(assignedUrl < 5 ){
 									// case for the first page that will be rendered first
 									if (m.get('cellId') == "r2c2")m.trigger("renderEvent");
 								} else if (assignedUrl == 5){
-									console.log("renderAll1");
 									this.renderAll();
 									
 								}
@@ -200,7 +189,6 @@ define(
 								
 								else{
 									// in other cases, render all models
-									console.log("..NO..")
 									m.trigger("renderEvent");
 								}
 								
@@ -215,15 +203,12 @@ define(
 				//direction of the slide movement (up,down,left,right), assigned by the router,
 				//or the functions handling the swipe.
 				setTransitionType : function(trstype){
-					console.log("hello transition type: " + trstype);
 					this.mvt = trstype;
-					console.log("this.mvt: " + this.mvt);
 				},
 				mvt : "",
 
 				//triggered before the page change
 				beforeChange : function(e, data) {
-					console.log("beforechange: "+data.toPage);
 					// this is triggered twice by JQM (because I trigger the .changePage), once with a string,
 					// and then a second time with page object created with
 					// .page();
@@ -244,7 +229,6 @@ define(
 				},
 
 				pageChangedHandler : function(e, data) {
-					console.log("pageChangedHandler");
 					// get the id of the new page
 					var currentPage;
 
@@ -270,14 +254,12 @@ define(
 						isBackward = false;
 						depth ++;
 						this.memorize(currentPage);
-						console.log("--> going forward depth: "+depth);
 					} else if (newPageDepth == depth-2){
 						//case moving backward
 						isBackward = true;
 						currentPage = this.oppositeCell(currentPage);
 						this.forgetLastStep();
 						depth --;
-						console.log("--> going backward");
 					}
 
 
@@ -292,7 +274,6 @@ define(
 					// the destination and the pages that are isHistory = true)
 
 					if (currentPage !="r2c2") {
-						console.log("--> pageChangedHandler 2");
 
 
 						for ( var aa = models.length - 1; aa >= 0; aa--) {
@@ -302,7 +283,6 @@ define(
 									&& (models[aa].get("isHistory") !== true))
 							{
 								Col.remove(models[aa]);
-								console.log("removing");
 							} else {
 								models[aa].set({'isHistory': true});
 
@@ -322,9 +302,6 @@ define(
 						//TODO when backward, improper link to next level down
 						// get cue from history
 
-						for ( var aa in models) {
-							console.log("################## ############ divId "+ models[aa].get("divId"));
-						}
 
 						for ( var a in Col.defaults) {
 

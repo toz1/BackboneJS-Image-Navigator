@@ -13,5 +13,6 @@ require.config({
 
 require(['app'],
         function(App) {
+	alert("main");
              App.init();
         } );

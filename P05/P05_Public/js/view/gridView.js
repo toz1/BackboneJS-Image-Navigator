@@ -34,7 +34,6 @@ define([ 'jquery', 'underscore', 'backbone', 'view/pageView',
 		},
 		initialize : function() {
 			this.collection.bind('add', this.onAdd, this);
-			console.log("rROUTER in GridView: "+this.router);
 
 
 		}

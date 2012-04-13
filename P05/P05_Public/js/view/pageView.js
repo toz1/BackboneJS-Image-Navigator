@@ -20,9 +20,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			  
 			  
 			  dblclickHandler : function (e) {
-				  console.log(this.model.get('cellId')+"### click ### "+ this.model.get("leftNav"));
-				  console.log("### LEFT NAV ### "+ this.model.get("leftNav"));
-				  console.log("### RIGHT NAV ### "+ this.model.get("rightNav"));
 				  var txt = $('#navLeft',this.el).css("display");
 				  alert(txt);
 				 $(this.el).find('#txtView').html(txt);
@@ -32,14 +29,12 @@ define([ 'jquery', 'underscore', 'backbone',
 			swiperightHandler : function() { 
 					$(this.el).find('#txtView').html("swipe right");
 
-					console.log("swipe right");
 					if($('#navLeft',this.el).css("display","block"))this.router.navigate("nav/slideRight/"+this.model.get("leftNav"), {trigger: true});
 					},
 					
 				swipeleftHandler : function() { 
 					$(this.el).find('#txtView').html("swipe left");
 
-					console.log("swipe left");
 
 					if($('#navRight',this.el).css("display","block"))this.router.navigate("nav/slideLeft/"+this.model.get("rightNav"), {trigger: true});
 						},
@@ -48,21 +43,18 @@ define([ 'jquery', 'underscore', 'backbone',
 				swipeupHandler : function(e){
 					$(this.el).find('#txtView').html("swipe up");
 
-					console.log("swipe up");
 					if($('#navBottom',this.el).css("display","block"))this.router.navigate("nav/slideUp/"+this.model.get("bottomNav"), {trigger: true});
 					},
 					
 				swipedownHandler : function(e){
 					 $(this.el).find('#txtView').html("swipe down");
 
-					console.log("swipe down");
 
 					if($('#navTop',this.el).css("display","block"))this.router.navigate("nav/slideDown/"+this.model.get("topNav"), {trigger: true});
 						},
 			  
 
 		onModelRemove : function() {
-			console.log("removing view");
 			//remove this view
 			this.remove();
 			//remove the HTML div
@@ -74,8 +66,6 @@ define([ 'jquery', 'underscore', 'backbone',
 
 		render : function() {
 			//var model = this.model;
-			console.log("rendering model with memory: "
-					+ this.collection.getHistory());
 
 			// the actual id that is not going to be used outside this render function
 			// cellId stays 4 alphanumeric reference to the position (top left is r1c1 etc)
@@ -84,7 +74,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			var realCurrentId = this.collection.getHistory()
 					+ this.model.get('cellId');
 
-			console.log("REAL CURRENT ID: "+realCurrentId);
 			//add "-r2c2" at the end of the id: every cell is meant to become center (r2c2),
 			//so if it's set now there is no need to update this value once they are displayed
 			//(the visible page always ends by r2c2, the naming of the target pages is an anticipation
@@ -96,8 +85,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			this.divId = realCurrentId + "-r2c2";
 			
 			
-			console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ........... ?????? "+this.divId);
-			console.log("model cellId >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   "+this.model.get("cellId"));
 
 			
 			
@@ -117,13 +104,10 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			
 			//
-			console.log("divId                   "+this.model.get("divId"));
 			
 			this.vars.cell = this.divId;
 			this.vars.depth = this.collection.getDepth();
 
-			console.log("vars.cell: ", this.vars.cell, "  depth: ", this.collection
-					.getDepth());
 			
 
 			//define the links to the next pages
@@ -131,12 +115,9 @@ define([ 'jquery', 'underscore', 'backbone',
 			this.vars.rightNav = realCurrentId + "-r2c3-r2c2";
 			this.vars.bottomNav = realCurrentId + "-r3c2-r2c2";
 			this.vars.leftNav = realCurrentId + "-r2c1-r2c2";
-			console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+this.model.get('cellId') +">>> this.vars.rightNav: "+this.vars.rightNav);
 
 			// change the link pointing to the page we are coming from 
 			//TODO keep memory of all pages visited
-			console.log("[pageView] this.collection.getHistory() ::::::: >>>>> " +this.collection.getHistory());
-			console.log("[pageView] this.collection.getHistory().lenght ::::::: >>>>> " +this.collection.getHistory().length);
 			var prevLink = this.collection.getDepth() == 1 ? "r2c2-r2c2" : this.collection.getHistory()+"r2c2";
 			
 			switch(this.model.get('cellId')){
@@ -176,7 +157,6 @@ define([ 'jquery', 'underscore', 'backbone',
 						":not(.ui-page-active)").filter(":not[id]=''");
 
 				for ( var a = 0; a < availableDiv1.length; a++) {
-					console.log("  available div  ------>  " + availableDiv1[a].id);
 					// replace the existing div until all are replaced, then add new ones
 					//TODO see if I can always add DIV, and not replace
 					//TODO once the binding of the removing of the model and the removing of the html DIV
@@ -185,7 +165,6 @@ define([ 'jquery', 'underscore', 'backbone',
 					if ($(availableDiv1[a]).attr("depth") == this.collection
 							.getDepth() - 1
 							&& this.collection.getDepth() < 5) {
-						console.log("::1 "+$(availableDiv1[a]).attr("id"));
 						this.el = $("#"+$(availableDiv1[a]).attr("id"));
 						//this.el=$(availableDiv1[a]);
 						this.el.replaceWith(template);
@@ -195,7 +174,6 @@ define([ 'jquery', 'underscore', 'backbone',
 					}
 				}
 					if(!foundAvailDiv){
-					console.log("this.collection.getDepth() >= 5  cell:  ====>>> "+ this.vars.cell);
 					this.el = $("#container");
 					this.el.append(template);
 					this.setElement($("#"+this.vars.cell));
@@ -209,23 +187,19 @@ define([ 'jquery', 'underscore', 'backbone',
 			//TODO condense this
 			for (var b in this.collection.models){
 				var tmId = this.collection.models[b].get("divId");
-				console.log("fffffffff "+ tmId);
 				if (tmId == this.vars.bottomNav && this.collection.models[b].get("imgLoaded") == true){
-					console.log("model"+this.model.get("divId")+"  "+tmId+"  1hhhhhhhhhhhhhhhHHHHHHHHHHHHHHHHHHHHHHHHHAAA "+this.vars.bottomNav);
 					//this.collection.models[b].trigger("displayLinkEvent",this.collection.models[b].get("divId"));
 					//this.collection.models[b].displayLink(tmId);
 					this.displayLink(this.vars.bottomNav);
 				}
 				
 				if (tmId == this.vars.topNav && this.collection.models[b].get("imgLoaded") == true){
-					console.log("model"+this.model.get("divId")+"  "+tmId+"  2hhhhhhhhhhhhhhhHHHHHHHHHHHHHHHHHHHHHHHHHAAA "+this.vars.bottomNav);
 					//this.collection.models[b].trigger("displayLinkEvent",this.collection.models[b].get("divId"));
 					//this.collection.models[b].displayLink(tmId);
 					this.displayLink(this.vars.topNav);
 				}
 				
 				if (tmId == this.vars.leftNav && this.collection.models[b].get("imgLoaded") == true){
-					console.log("model"+this.model.get("divId")+"  "+tmId+"  3hhhhhhhhhhhhhhhHHHHHHHHHHHHHHHHHHHHHHHHHAAA "+this.vars.bottomNav);
 					//this.collection.models[b].trigger("displayLinkEvent",this.collection.models[b].get("divId"));
 					//this.collection.models[b].displayLink(tmId);
 					this.displayLink(this.vars.leftNav);
@@ -233,7 +207,6 @@ define([ 'jquery', 'underscore', 'backbone',
 				}
 				
 				if (tmId == this.vars.rightNav && this.collection.models[b].get("imgLoaded") == true){
-					console.log("model"+this.model.get("divId")+"  "+tmId+"  4hhhhhhhhhhhhhhhHHHHHHHHHHHHHHHHHHHHHHHHHAAA "+this.vars.bottomNav);
 					//this.collection.models[b].trigger("displayLinkEvent",this.collection.models[b].get("divId"));
 					//this.collection.models[b].displayLink(tmId);
 					this.displayLink(this.vars.rightNav);
@@ -254,12 +227,9 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			var imgTag = $("#imContainer","#" + this.vars.cell);
 			
-			console.log("???? : === >> "+imgTag.html());
 
 			
-			console.log("cell: ====================================================== >> "+this.vars.cell);
 
-			console.log("SCR1: === >> "+$("img",imgTag).attr('src'));
 			
 			//
 			//this.beforeChange = _.bind(this.beforeChange, this);
@@ -272,12 +242,10 @@ define([ 'jquery', 'underscore', 'backbone',
 				});
 				model.trigger("imgLoadedEvent", model);
 				$(imgTag).find("img").replaceWith(image);
-				console.log("IMAGE LOADED!!!!!!!!!!    >>>>  > > > this.vars.cell ... "+model.get("divId"));
 				if(cell == "r2c2-r2c2"){$.mobile.initializePage();}
 				
 	
 			};
-			console.log(">>>> URL "+model.get('imgUrl'));
 			image.src = model.get('imgUrl');
 
 			
@@ -288,7 +256,6 @@ define([ 'jquery', 'underscore', 'backbone',
 		},
 		newImgLoaded : function(id){
 			
-			console.log("=================IMAGE ID !!!!!!!!!!!!!!!!!!!!!!!!!  "+id);
 
 			if(this.model.get('divId') != "" && this.model.get('divId')!= id){
 			this.displayLink(id);
@@ -300,14 +267,6 @@ define([ 'jquery', 'underscore', 'backbone',
 		
 		displayLink : function(link){
 			
-			console.log("***DISPLAY LINK2***"+ this.model.get('divId')+"<    link: "+link
-					+"  m.get('leftNav') "+ this.model.get('leftNav')
-					+"  m.get('rightNav') "+ this.model.get('rightNav')
-					+"  m.get('topNav') "+ this.model.get('topNav')
-					+"  m.get('bottomNav') "+ this.model.get('bottomNav')
-			
-			);
-			
 			
 			var m = this.model;
 			
@@ -316,7 +275,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			
 			case m.get('bottomNav'):
-				console.log("CSS "+$('#navBottom','#'+m.get("divId")).css("display"));
 				$('#navBottom','#'+m.get("divId")).css("display","block");
 				break;
 			
