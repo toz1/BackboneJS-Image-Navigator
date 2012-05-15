@@ -201,7 +201,7 @@ define(
 
 				},
 				//direction of the slide movement (up,down,left,right), assigned by the router,
-				//or the functions handling the swipe.
+				//or the functions handling the swipe in pageView.js
 				setTransitionType : function(trstype){
 					this.mvt = trstype;
 				},
@@ -217,6 +217,7 @@ define(
 
 					if (typeof data.toPage === "string") {
 						$(data.toPage).page();
+						
 						$.mobile.changePage($(data.toPage), {
 							transition : this.mvt,
 							allowSamePageTransition : true,

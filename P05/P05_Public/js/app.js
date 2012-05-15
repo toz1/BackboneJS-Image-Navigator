@@ -8,7 +8,7 @@ define([
         'order!model/ImgDataCollection' 
       ], function($, $$, _, Backbone, AppRouter, gridView,imgDataCollection){
         var init = function(){
-        	alert("app");
+        	
         	// let Backbone handle the routing
         	$.mobile.linkBindingEnabled = false;
             $.mobile.hashListeningEnabled = false;

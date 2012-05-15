@@ -1,18 +1,21 @@
 <div data-role="page" id="<%= cell %>" depth="<%= depth %>">
+        <div id="head" data-role="header" data-position="fixed" data-theme="a">
+    <h1>Fixed Header!</h1>
+</div>  
 	<div data-role="content">
         <div id="imContainer"><img  src="img/ajax-loader.png"/></div>
        <div id="txtView"><%= cell %></div>
        <div id="center-wrapper-top">
-       <a href="#nav/slideDown/<%= topNav %>" id="navTop" data-role="button" data-icon="arrow-u" data-iconpos="right" data-theme="a">navTop</a>
+       <a href="#nav/slideD/<%= topNav %>" id="navTop" data-role="button" data-icon="arrow-u" data-iconpos="right" data-theme="a">navTop</a>
        </div>
        <div id="center-wrapper-bottom">
-       <a href="#nav/slideUp/<%= bottomNav %>" id="navBottom" data-role="button" data-icon="arrow-d" data-iconpos="right" data-theme="a">navBottom</a>
+       <a href="#nav/slideU/<%= bottomNav %>" id="navBottom" data-role="button" data-icon="arrow-d" data-iconpos="right" data-theme="a">navBottom</a>
        </div>
        <div id="center-wrapper-right">
-       <a href="#nav/slideLeft/<%= rightNav %>" id="navRight" data-role="button" data-icon="arrow-r" data-iconpos="right" data-theme="a">navRight</a>
+       <a href="#nav/slideL/<%= rightNav %>" id="navRight" data-role="button" data-icon="arrow-u" data-iconpos="right" data-theme="a">navRight</a>
        </div>
        <div id="center-wrapper-left">
-       <a href="#nav/slideRight/<%= leftNav %>" id="navLeft" data-role="button" data-icon="arrow-l" data-iconpos="left" data-theme="a">navLeft</a>
+       <a href="#nav/slideR/<%= leftNav %>" class="navL" id="navLeft" data-role="button" data-icon="arrow-u" data-iconpos="left" data-theme="a">navLeft</a>
        </div>
         
         

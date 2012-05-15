@@ -20,37 +20,36 @@ define([ 'jquery', 'underscore', 'backbone',
 			  
 			  
 			  dblclickHandler : function (e) {
-				  var txt = $('#navLeft',this.el).css("display");
-				  alert(txt);
-				 $(this.el).find('#txtView').html(txt);
+				  //var txt = $('#navLeft',this.el).css("display");
+				 //$(this.el).find('#txtView').html(txt);
 				//this.router.navigate("nav/slideRight/"+this.model.get("leftNav"), {trigger: true});
 				  
 			  },
 			swiperightHandler : function() { 
 					$(this.el).find('#txtView').html("swipe right");
+					// only naviguate if the link is displayed (the link is diplayed once the image is loaded)
 
-					if($('#navLeft',this.el).css("display","block"))this.router.navigate("nav/slideRight/"+this.model.get("leftNav"), {trigger: true});
+					if($('#navLeft',this.el).css("display","block"))this.router.navigate("nav/slideR/"+this.model.get("leftNav"), {trigger: true});
 					},
 					
 				swipeleftHandler : function() { 
 					$(this.el).find('#txtView').html("swipe left");
 
 
-					if($('#navRight',this.el).css("display","block"))this.router.navigate("nav/slideLeft/"+this.model.get("rightNav"), {trigger: true});
+					if($('#navRight',this.el).css("display","block"))this.router.navigate("nav/slideL/"+this.model.get("rightNav"), {trigger: true});
 						},
 
 					
 				swipeupHandler : function(e){
 					$(this.el).find('#txtView').html("swipe up");
-
-					if($('#navBottom',this.el).css("display","block"))this.router.navigate("nav/slideUp/"+this.model.get("bottomNav"), {trigger: true});
+					if($('#navBottom',this.el).css("display","block"))this.router.navigate("nav/slideU/"+this.model.get("bottomNav"), {trigger: true});
 					},
 					
 				swipedownHandler : function(e){
 					 $(this.el).find('#txtView').html("swipe down");
 
 
-					if($('#navTop',this.el).css("display","block"))this.router.navigate("nav/slideDown/"+this.model.get("topNav"), {trigger: true});
+					if($('#navTop',this.el).css("display","block"))this.router.navigate("nav/slideD/"+this.model.get("topNav"), {trigger: true});
 						},
 			  
 
@@ -203,6 +202,8 @@ define([ 'jquery', 'underscore', 'backbone',
 					//this.collection.models[b].trigger("displayLinkEvent",this.collection.models[b].get("divId"));
 					//this.collection.models[b].displayLink(tmId);
 					this.displayLink(this.vars.leftNav);
+					//console.log("STYLE: "+document.getElementById('navLeft').style);
+					//$('.navL').css('-webkit-transform', 'rotate(-45deg)');
 
 				}
 				
@@ -260,9 +261,7 @@ define([ 'jquery', 'underscore', 'backbone',
 			if(this.model.get('divId') != "" && this.model.get('divId')!= id){
 			this.displayLink(id);
 			}
-			//XXX
-			//TODO display the links once the images are loaded
-			
+						
 		},
 		
 		displayLink : function(link){

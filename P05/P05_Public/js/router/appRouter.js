@@ -22,7 +22,6 @@ define( ['order!jquery',
                 //to use it in call to changePage in beforeChange();
                 //TODO add deep linking keeping image and text
                 this.collection.setTransitionType(mvt);
-                
                 $.mobile.changePage(toDiv);
 
                 },
