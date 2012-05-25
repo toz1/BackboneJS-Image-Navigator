@@ -3,7 +3,7 @@ define([
   'backbone'
 
 ], function(_, Backbone, pageView) {
-  var imgModel = Backbone.Model.extend({
+  var pageModel = Backbone.Model.extend({
 	  
 	defaults: {
 		 "status":  "awaitUrl",
@@ -31,6 +31,6 @@ define([
   
   });
   
-  return imgModel;
+  return pageModel;
   
   });

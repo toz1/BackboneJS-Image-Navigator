@@ -1,6 +1,6 @@
 define([ 'jquery', 'underscore', 'backbone', 'view/pageView',
-		'model/ImgDataCollection', 'router/appRouter' ], function($, _, Backbone, pageView,
-		imgDataCollection, _router) {
+		'model/PageCollection', 'router/appRouter' ], function($, _, Backbone, pageView,
+		PageCollection, _router) {
 	// Using ECMAScript 5 strict mode during development. By default r.js will ignore that.
 	"use strict";
 
@@ -11,7 +11,7 @@ define([ 'jquery', 'underscore', 'backbone', 'view/pageView',
 			this.router = r;
 			// here because the view need to be ready to catch the add events
 			//View is ready, load images
-			this.collection.loadImgs();
+			this.collection.loadInitImgs();
 		},
 		onAdd : function(m) {
 			var pView = new pageView({

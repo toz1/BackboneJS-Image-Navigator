@@ -1,7 +1,7 @@
 define(
-		[ 'jquery', 'underscore', 'backbone', 'model/ImgDataModel',
-		  'model/DataProxy','view/pageView' ],
-		  function($, _, Backbone, ImgDataModel, DataProxy) {
+		[ 'jquery', 'underscore', 'backbone', 'model/PageModel',
+		  'model/FlickrProxy', 'model/PresageProxy'],
+		  function($, _, Backbone, PageModel, FlickrProxy, PresageProxy) {
 
 
 
@@ -9,7 +9,7 @@ define(
 			.extend({
 				// url:"http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=6a5342fd46df2623768be8ccfac1d723",
 
-				model : ImgDataModel,
+				model : PageModel,
 				orientation : "landscape",
 				defaults : [ {
 					"cellId" : "r2c2",
@@ -98,27 +98,31 @@ define(
 
 				},
 
-				loadImgs : function() {
+				loadInitImgs : function() {
+					//******temp*********
+					presageProxy.fetch(presageFetchOpt);
+					//******/temp*********
+
 					//
 					// adding the models will instantiate all the view.
 					// The views will only be rendered on model change
 					// event.
 					this.add(this.defaults);
 
-					// fetch the images attributes from Flickr
+					// fetch the images attributes from Flickr for the first time only
+					// subsequent fetch are done in pageChangedHandler();
 					for ( var a in this.models) {
 						if (this.models[a].get("status") == "awaitUrl") {
 							
-							if(!dataModel.isDebug){
-								dataModel.fetch(fetchOptions);
-							} else {
-								this.localDebug();
-							}
+							flickrProxy.fetch(flickrFetchOpt);
+							
 						}
 					}
 				},
+				
+				
 				// success getting the Flickr API
-				successfunction : function(model, data) {
+				flickrSuccess : function(model, data) {
 					//select from the list the image with the correct orientation
 					var index = -1;
 					for (var a in data.photos.photo){
@@ -148,11 +152,32 @@ define(
 					this.assignUrl(imgUrl);
 
 				},// end success function
+				
+				
+				// success getting the Presage API
+				presageSuccess : function(model, data) {
+					
+				console.log(" [PageCollection] presage success: "+ data.firstChild.firstChild.firstChild.textContent);
+				for (var a in data.firstChild.firstChild.firstChild){
+					
+					console.log(" [PageCollection] presage "+a+ " >>> "+ data.firstChild.firstChild.firstChild[a]);
+
+					
+				};
+					
+				},// end success function
+				
 				localDebug : function(){
 
 					this.assignUrl("img/im1.jpg");
 
 
+				},
+				
+				presageError : function(model, data){
+		
+					console.log("[PageCollection] presage error: "+data.responseText);
+					
 				},
 
 				assignUrl : function(imgUrl) {
@@ -228,7 +253,8 @@ define(
 					}//end if
 
 				},
-
+				
+				//triggered after the page change
 				pageChangedHandler : function(e, data) {
 					// get the id of the new page
 					var currentPage;
@@ -315,11 +341,7 @@ define(
 
 									Col.add(Col.defaults[a]);
 									
-									if(!dataModel.isDebug){
-										dataModel.fetch(fetchOptions);
-									} else {
-										this.localDebug();
-									}
+									flickrProxy.fetch(flickrFetchOpt);
 								}
 							}
 
@@ -371,13 +393,25 @@ define(
 					// new grid coordonates of the last cell visited, once the page will be changed;
 					lastCell = "";
 
+					
+					// proxies
+					flickrProxy = new FlickrProxy;
+					presageProxy = new PresageProxy;
+					
 					// fetch options
-					dataModel = new DataProxy;
-					fetchOptions = {};
+					
+					flickrFetchOpt = {};
+					presageFetchOpt = {};
 
-					successfunction = _
-					.bind(this.successfunction, this);
-					fetchOptions.success = successfunction;
+					//binding to keep the scope of this
+					flickrSuccess = _.bind(this.flickrSuccess, this);
+					presageSuccess = _.bind(this.presageSuccess, this);
+					presageError = _.bind(this.presageError, this);
+
+					//
+					flickrFetchOpt.success = flickrSuccess;
+					presageFetchOpt.success = presageSuccess;
+					presageFetchOpt.error = presageError;
 
 					// 
 					// binding to get a reference to this inside the functions

@@ -5,8 +5,8 @@ define([
         'order!backbone',
         'order!router/appRouter',
         'order!view/gridView',
-        'order!model/ImgDataCollection' 
-      ], function($, $$, _, Backbone, AppRouter, gridView,imgDataCollection){
+        'order!model/PageCollection' 
+      ], function($, $$, _, Backbone, AppRouter, gridView, PageCollection){
         var init = function(){
         	
         	// let Backbone handle the routing
@@ -18,7 +18,7 @@ define([
             // initialization is done in pageView image.onload()
             $.mobile.autoInitializePage = false;
 
-        	var _imgDataC = new imgDataCollection;
+        	var _imgDataC = new PageCollection;
         	var _router = new AppRouter;
            	_router.collection = _imgDataC;
         	var _gridView = new gridView({collection: _imgDataC});

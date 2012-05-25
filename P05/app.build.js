@@ -1,4 +1,4 @@
-//CadavreExquis t1$ java -classpath js.jar org.mozilla.javascript.tools.shell.Main r.js -o app.build.js
+// t1$ java -classpath js.jar org.mozilla.javascript.tools.shell.Main r.js -o app.build.js
 ({
 	appDir: 'P05_Public/',
 	baseUrl: 'js',
