@@ -1,0 +1,389 @@
+//https://github.com/d5/docs/wiki/Installing-FastCGI-w--C++-on-Ubuntu-(Amazon-EC2)
+//http://stackoverflow.com/questions/4577453/fcgio-cpp50-error-eof-was-not-declared-in-this-scope
+
+sudo su
+apt-get update -y
+apt-get install -y chkconfig
+apt-get install -y build-essential
+apt-get install -y libtool
+apt-get install -y nginx
+vi /etc/nginx/nginx.conf
+
+service nginx start
+chkconfig nginx on
+cd ~
+wget http://www.fastcgi.com/dist/fcgi-2.4.0.tar.gz
+tar -zxvf fcgi-2.4.0.tar.gz
+rm -rf fcgi-2.4.0.tar.gz
+cd fcgi-2.4.0
+nano include/fcgio.h
+add "#include <stdio.h>" below "#include "
+
+./configure
+make
+make install
+cd ~
+vi main.cpp
+#include <fcgi_stdio.h>
+#include <stdlib.h>
+
+int main(int, char**)
+{
+    int count = 0;
+    while(FCGI_Accept() >= 0)
+        printf("Content-type: text/html\r\n"
+            "\r\n"
+            "Hello, World! "
+            "Request number %d running on host %s\n",
+            ++count, getenv("SERVER_NAME"));
+
+    return 0;
+}
+link as shared library:
+
+g++ main.cpp -lfcgi
+link as static library:
+
+g++ main.cpp /usr/local/lib/libfcgi.a
+
+///////////////////////////////////////////////////////////////////////
+
+with fastcgi++
+https://lists.nongnu.org/archive/html/fastcgipp-users/2011-01/msg00009.html
+
+https://console.aws.amazon.com/ec2/home?region=eu-west-1#launchAmi=ami-87c5fdf3
+sudo su
+apt-get update -y
+apt-get install -y chkconfig
+apt-get install -y build-essential
+apt-get install -y libtool
+apt-get install -y nginx
+vi /etc/nginx/nginx.conf
+
+////www files in /usr/share/nginx/www
+
+service nginx start
+chkconfig nginx on
+cd ~
+
+// install boost
+////http://beans.seartipy.com/2006/03/15/installing-c-boost-on-gentoo-and-debianubuntu/
+
+sudo apt-get install libboost-dev
+sudo apt-get install libboost-date-time1.46-dev libboost-thread1.46 libboost-filesystem1.46 libboost-iostreams1.46
+
+
+// install fastCGI++
+wget http://download.savannah.nongnu.org/releases/fastcgipp/fastcgi++-2.0.tar.bz2
+tar -xvjf fastcgi++-2.0.tar.bz2
+rm -rf fastcgi++-2.0.tar.bz2
+cd fastcgi++-2.0
+./configure
+make
+make install
+
+cd ~
+nano main.cpp
+#include <fcgi_stdio.h>
+#include <stdlib.h>
+
+int main(int, char**)
+{
+    int count = 0;
+    while(FCGI_Accept() >= 0)
+        printf("Content-type: text/html\r\n"
+            "\r\n"
+            "Hello, World! "
+            "Request number %d running on host %s\n",
+            ++count, getenv("SERVER_NAME"));
+
+    return 0;
+}
+
+// compile with:
+g++ -o script.fcgi script.cpp $(pkg-config --libs --cflags fastcgi++)
+http://www.nongnu.org/fastcgipp/doc/2.0/index.html#installation
+// install spawn
+sudo apt-get install spawn-fcgi
+
+//  example of spawn for php
+# /usr/local/bin/spawn-fcgi -a 127.0.0.1 -p 9000 -u www -g www -f /usr/local/bin/php-cgi
+
+Where,
+
+-a 127.0.0.1 : PHP FastCGI bind IP address, where Nginx will connect.
+-p 9000: PHP FastCGI port number, where Nginx will connect.
+-u www : PHP FastCGI username.
+-g www : PHP FastCGI groupname.
+-f /usr/local/bin/php-cgi : Path to PHP5 fastcgi binary.
+
+// example of spawn with socket
+
+  spawn-fcgi.standalone -u root -g root -G www-data -s /tmp/user.socket -f /home/user/deployment/echo.fcgi
+  
+  
+  
+//options:  http://www.digipedia.pl/man/doc/view/spawn-fcgi.standalone.1/
+  
+
+/// nginx config
+
+vi /etc/nginx/sites-enabled
+
+location ~ \.fcgi$ {
+       	fastcgi_pass    unix:/tmp/user.socket;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  /$fastcgi_script_name;
+        include fastcgi_params;
+}
+
+
+
+///------------ simple Apache CGI -------------------
+
+sudo aptitude install apache2
+sudo nano /etc/apache2/sites-enabled/000-default
+
+add the correct path in place of /usr/lib/cgi-bin/
+        ScriptAlias /cgi-bin/ /home/ubuntu/cgi-bin/
+        <Directory "/home/ubuntu/cgi-bin">
+
+
+
+
+sudo /etc/init.d/apache2 restart
+
+// example of c++ script
+
+#include <iostream>
+using namespace std;
+ 
+int main ()
+{
+    
+   cout << "Content-type:text/html\r\n\r\n";
+   cout << "<html>\n";
+   cout << "<head>\n";
+   cout << "<title>Hello World - First CGI Program</title>\n";
+   cout << "</head>\n";
+   cout << "<body>\n";
+   cout << "<h2>Hello World! This is my first CGI program</h2>\n";
+   cout << "</body>\n";
+   cout << "</html>\n";
+   
+   return 0;
+}
+
+// compile with 
+sudo apt-get install g++
+sudo g++ -o c2.cgi c2.cpp
+chmod 755 c2.cgi
+
+sudo mv c2.cgi cgi-bin
+
+
+////-------------------------------------------------
+implement presage
+/////--------------------------
+
+sudo apt-get install make
+// install sqlite development package
+sudo apt-get install libsqlite3-dev
+
+download presage
+wget http://sourceforge.net/projects/presage/files/presage/0.8.8b/presage-0.8.8b.tar.gz
+tar -zxvf presage-0.8.8b.tar.gz
+cd presage
+./configure
+make (takes 5min)
+sudo make install
+
+
+<code>
+#include "presage.h"
+#include <iostream>
+
+/* Simple example callback that tracks past context with a string.
+ *
+ * Using a callback object decouples the user application from the
+ * chosen text buffer (which could be a simple string, a graphical
+ * text widget, a file stream, etc.) and frees the caller from having
+ * to explicitly notify of any updates to the context. Presage will
+ * invoke on the callback whenever access to contextual data is
+ * required.
+ *
+ */
+class ExampleCallback : public PresageCallback
+{
+public:
+    ExampleCallback(const std::string& _past_context) : past_context(_past_context) { }
+
+    std::string get_past_stream() const { return past_context; }
+    std::string get_future_stream() const { return empty; }
+
+private:
+    const std::string& past_context;
+    const std::string empty;
+
+};
+
+int main(int argc, char** argv)
+{
+    std::string context;
+    ExampleCallback callback(context);
+    Presage presage(&callback);
+    
+    std::string buffer;
+    std::vector< std::string > predictions;
+
+    for (;;) {
+	// prompt user and append line into context buffer
+	std::cout << "> ";
+	getline(std::cin, buffer);
+	context += buffer;
+
+	// request prediction
+	predictions = presage.predict ();
+
+	// print predictions
+	for (int i = 0; i < predictions.size(); i++) {
+	    std::cout << i << ':' << predictions[i] << std::endl;
+	}
+    }
+
+    return 0;
+}
+</code>
+
+sudo g++ -I/lib/presage -o p0.cgi p0.cpp -lpresage
+
+// error :
+// error while loading shared libraries: libpresage.so.1: cannot open shared object file: No such file or directory
+
+sudo updatedb
+locate libpresage.so.1
+
+sudo nano /etc/ld.so.conf
+/usr/local/lib/
+sudo ldconfig -v
+
+/////////////////// API ///////
+//installation directory
+/usr/local/axis2c
+
+cd /usr/local
+sudo wget http://www.mirrorservice.org/sites/ftp.apache.org//ws/axis2/c/1_6_0/axis2c-bin-1.6.0-linux.tar.gz
+
+AXIS2C_HOME='/usr/local/axis2c'
+export AXIS2C_HOME
+
+sudo tar -zxvf axis2c-bin-1.6.0-linux.tar.gz
+sudo rm -rf axis2c-bin-1.6.0-linux.tar.gz
+cd /usr/local/share/axis2c-bin-1.6.0-linux/lib
+libmod_axis2.so.0.6.0 /usr/lib/apache2/modules/mod_axis2.so
+
+cd /usr/lib/apache2/modules
+
+ldd mod_axis2.so
+locate libaxis2_engine.so.0
+nano /etc/ld.so.conf
+
+/usr/sbin/apache2 -V
+sudo nano /etc/apache2/httpd.conf
+
+//<insert>
+LoadModule axis2_module /usr/lib/apache2/modules/mod_axis2.so
+
+Axis2RepoPath /usr/local/share/axis2c-bin-1.6.0-linux
+
+Axis2LogFile /var/log/axis.log
+
+Axis2MaxLogFileSize 1m
+
+Axis2LogLevel debug
+
+<Location /axis2>
+
+SetHandler axis2_module
+
+</Location>
+
+//</insert>
+
+///
+
+sudo /etc/init.d/apache2 restart
+
+NEXT STEPS:
+
+1.- test config
+2.- build api
+3.- train a google model for prediction
+
+4._ (optional) see fastCGI/fastCGI++
+
+
+//// the google way
+prediction2346245/language_id.txt
+
+
+////////////// intalling Staff /////////////////
+
+sudo apt-get install make
+sudo apt-get install g++
+sudo vi /etc/environment
+AXIS2C_HOME="/usr/lib/axis2"
+
+You should re-login after you set that variable.
+
+sudo apt-add-repository ppa:loentar/wsf-staff-stable
+sudo apt-get update
+sudo apt-get install staff-libs libaxis2c-bin
+sudo apt-get install staff-dev
+sudo apt-get install libapache2-mod-staff-axis2services
+sudo updatedb
+sudo apt-get install apache2-mpm-prefork
+env | grep -qE 'STAFF_HOME' || echo OK
+cd /usr/lib/axis2/bin
+./axis2_http_server
+
+staff_codegen -l
+
+
+
+http://code.google.com/p/staff/wiki/InstallationManualUbuntuPpa
+
+
+
+//build with
+staff_codegen[ <source files>]
+
+/// start server
+
+cd /usr/lib/axis2/bin
+./axis2_http_server
+
+//get staff.js from
+http://code.google.com/p/staff/source/browse/trunk/staff/bindings/javascript/client/staff.js?r=452
+
+//to generate the service js file:
+// copy the wsdl from 
+http://<site-ip>/axis2/services
+staff_codegen -pwsdl -tjsclient Calculator.wsdl
+
+/// logs location
+/usr/lib/axis2/logs
+
+// services component location
+/usr/lib/staff/components/
+
+// test at
+http://localhost:9090/axis2/services/samples.Calculator/Add/a=1,b=2
+
+///// DEBUG
+
+ldd -d -r /usr/lib/staff/components/samples/libsamples.so
+nm /usr/lib/staff/components/samples/libsamples.so
+ 
+
+
