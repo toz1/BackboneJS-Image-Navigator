@@ -2,11 +2,13 @@ define([
   'underscore',
   'backbone'
 ], function(_, Backbone) {
-  var PresageProxy = Backbone.Model.extend({ 
+  var PresageProxy = Backbone.Model.extend({
+	  	//the presage context
+	  	context: "",
 	  
 	  	url: function() {
 	 
-		 return "http://79.125.124.189/axis2/services/samples.Calculator/Word/context=hello";
+		 return "http://79.125.115.27/axis2/services/samples.Calculator/Word/context="+this.context;
 		 },
 		  // Map from CRUD to HTTP for our default `Backbone.sync` implementation.
 		  methodMap : {
@@ -70,6 +72,7 @@ define([
 
 		    // Don't process data on a non-GET request.
 		    if (params.type !== 'GET' && !Backbone.emulateJSON) {
+		    	console.log("[PresageProxy] params.processData = false;");
 		      params.processData = false;
 		    }
 
@@ -77,33 +80,6 @@ define([
 		    return $.ajax(_.extend(params, options));
 		  },
 
-		 
-		 /*sync: function(){
-			 console.log("sync");
-			 var url = "http://54.247.185.202/axis2/services/samples.Calculator/Word/context=hello";
-			  var xhr = new XMLHttpRequest();
-			  if("withCredentials" in xhr)
-			  {
-				  $.support.cors = true;
-				  console.log($.support.cors);
-				  console.log("sync_1");
-			   // Firefox 3.5 and Safari 4
-				  xhr.open('GET', url, true);
-				  xhr.setRequestHeader('Content-Type', 'text/plain');
-			      xhr.onreadystatechange = this.handler;
-			   xhr.send();
-			  }
-			  else if (XDomainRequest)
-			  {
-				  console.log("sync2");
-			   // IE8
-			   var xdr = new XDomainRequest();
-			   xdr.open("get", url);
-			   xdr.send();
-			 
-			   // handle XDR responses -- not shown here :-)
-			  }
-		 },*/
 		 handler : function(e,d){
 			 for (var a in e){
 			 console.log ("PresageProxy handler: "+a+"  --> "+e[a]);

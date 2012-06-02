@@ -4,9 +4,9 @@ define([
         'order!underscore',
         'order!backbone',
         'order!router/appRouter',
-        'order!view/gridView',
+        'order!view/appView',
         'order!model/PageCollection' 
-      ], function($, $$, _, Backbone, AppRouter, gridView, PageCollection){
+      ], function($, $$, _, Backbone, AppRouter, appView, PageCollection){
         var init = function(){
         	
         	// let Backbone handle the routing
@@ -15,21 +15,23 @@ define([
             $.mobile.pushStateEnabled = false;
             
             //wait for the pages to be ready before initializing
-            // initialization is done in pageView image.onload()
+            // initialization of JQM is in pageView.js image.onload()
             $.mobile.autoInitializePage = false;
+            
+            // initialization of Backbone is in appRouter.js initialize()
 
         	var _imgDataC = new PageCollection;
         	var _router = new AppRouter;
            	_router.collection = _imgDataC;
-        	var _gridView = new gridView({collection: _imgDataC});
-        	_gridView.setRouter(_router);
+        	var _appView = new appView({collection: _imgDataC});
+        	_appView.setRouter(_router);
         	
         	_imgDataC.orientation = $(window).width() > $(window).height() ? "landscape" : "portrait" ;
         	
             $(window).bind('orientationchange', function(event) {
             	
             	_imgDataC.orientation = event.orientation;
-         	   alert(event.orientation + ' ' + orientation); 
+         	   alert(event.orientation + ' ' + _imgDataC.orientation); 
          	  
          	 });
  

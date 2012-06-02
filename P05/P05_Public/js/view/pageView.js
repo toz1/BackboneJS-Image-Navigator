@@ -12,8 +12,10 @@ define([ 'jquery', 'underscore', 'backbone',
 			    "dblclick"					: 'dblclickHandler'
 			  },
 			  
+
+			  
 			  setRouter : function (r){
-				  
+				  console.log("router is set: "+r);
 				this.router = r;  
 				  
 			  },
@@ -64,7 +66,7 @@ define([ 'jquery', 'underscore', 'backbone',
 		vars : {},
 
 		render : function() {
-			//var model = this.model;
+			console.log("-- > RENDERING | word: "+this.model.get('word')+" | cellId: "+this.model.get('cellId'));
 
 			// the actual id that is not going to be used outside this render function
 			// cellId stays 4 alphanumeric reference to the position (top left is r1c1 etc)
@@ -143,7 +145,6 @@ define([ 'jquery', 'underscore', 'backbone',
 
 
 			var template = _.template(tpl, this.vars);
-		
 
 			if (this.collection.getDepth() == 0) {
 				this.el =$("#" + this.vars.cell);
@@ -151,10 +152,17 @@ define([ 'jquery', 'underscore', 'backbone',
 				this.setElement($("#" + this.vars.cell));
 			}
 			else {
+				/*
 				var foundAvailDiv =false;
-				var availableDiv1 = $("[data-role]='page'").filter(
-						":not(.ui-page-active)").filter(":not[id]=''");
-
+				var availableDiv1 = $("div[data-role='page']").filter(":not('#homePage')").filter(":not(.ui-page-active)");
+				console.log("::1 "+availableDiv1.length);
+				var avai = $("div[data-role='header']");
+				console.log("::2 "+availableDiv1);
+				console.log("::3 "+avai);
+				//console.log("availableDiv id ",availableDiv1.attr("id"));
+				for ( var aa = 0; aa < availableDiv1.length; aa++) {
+				console.log(aa + " :availableDiv1 ",availableDiv1[aa]);
+				}
 				for ( var a = 0; a < availableDiv1.length; a++) {
 					// replace the existing div until all are replaced, then add new ones
 					//TODO see if I can always add DIV, and not replace
@@ -167,16 +175,30 @@ define([ 'jquery', 'underscore', 'backbone',
 						this.el = $("#"+$(availableDiv1[a]).attr("id"));
 						//this.el=$(availableDiv1[a]);
 						this.el.replaceWith(template);
+							console.log("1............................................. "+$(availableDiv1[a]).attr("id"));
+
 						this.setElement($("#"+$(availableDiv1[a]).attr("id")));
+						//for(var c in this.el){
+						if(!this.el){
+							console.log("FAIL "+$(availableDiv1[a]).attr("id"));
+							this.el = $("#"+$(availableDiv1[a]).attr("id"));
+							this.el.replaceWith(template);
+							this.setElement($("#"+$(availableDiv1[a]).attr("id")));
+						};
+						//}
+					
+						
 						foundAvailDiv = true;
 						break;
 					}
 				}
-					if(!foundAvailDiv){
+					if(!foundAvailDiv){*/
+						console.log("*************************************** ");
+
 					this.el = $("#container");
 					this.el.append(template);
 					this.setElement($("#"+this.vars.cell));
-					}
+					//} 
 			}
 			
 
@@ -222,39 +244,41 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			// add a load complete listener to the images
 			//this.vars.url = this.model.get('imgUrl');
+
+
+			//
+
 			var image = new Image();
+			console.log("SETTING SRC TO: "+this.el+" <> "+this.vars.cell);
+			image.onload = this.onImgLoad;
+			
+			image.src = this.model.get('imgUrl');
 
-//			var imgTag = $("img","#imContainer","#" + this.vars.cell);
-			
-			var imgTag = $("#imContainer","#" + this.vars.cell);
-			
-
-			
-
-			
-			//
-			//this.beforeChange = _.bind(this.beforeChange, this);
-			var cell = this.vars.cell;
-			var model = this.model;
-			
-			image.onload = function(){
-				model.set("imgLoaded", true, {
-					silent : true
-				});
-				model.trigger("imgLoadedEvent", model);
-				$(imgTag).find("img").replaceWith(image);
-				if(cell == "r2c2-r2c2"){$.mobile.initializePage();}
-				
-	
-			};
-			image.src = model.get('imgUrl');
-
-			
-			//
-			
-			this.trigger("pageRendered", this.vars.cell);
 
 		},
+		
+		
+		  onImgLoad :  function(e){
+			  	//make sure the replacing of the image does not interfer with the templating
+				var imgTag = $("#imContainer","#" + this.vars.cell);
+				console.log("replacing "+this.model.get("cellId"));
+				console.log("replacing2 "+$(imgTag).find("img"));
+				
+				console.log("ha "+this.vars.cell);
+				$(imgTag).find("img").replaceWith(e.target);
+				console.log(":>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+this.vars.cell);
+				if(this.vars.cell == "r2c2-r2c2"){
+
+					this.router.navigate("nav/fade/r2c2-r2c2", {trigger: true});
+					
+				}
+				
+				this.model.set("imgLoaded", true, {
+					silent : true
+				});
+				this.model.trigger("imgLoadedEvent", this.model);
+	
+			},
 		newImgLoaded : function(id){
 			
 
@@ -292,7 +316,15 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 		},
 		
+
+		
 		initialize : function() {
+			
+
+			
+			this.onImgLoad = _.bind(this.onImgLoad, this);			  
+
+			
 			this.model.on("remove", this.onModelRemove, this);
 			this.model.on("idChange", this.onIdChange, this);
 			this.model.on("renderEvent", this.render, this);
@@ -380,12 +412,7 @@ define([ 'jquery', 'underscore', 'backbone',
 	                };
 	            });
 	/////////////////////////////////////////////////
-	            
-	     
-			
-					
-
-		}
+	   		}
 	});
 
 	return pageView;

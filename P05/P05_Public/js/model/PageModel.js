@@ -6,7 +6,9 @@ define([
   var pageModel = Backbone.Model.extend({
 	  
 	defaults: {
-		 "status":  "awaitUrl",
+		 "word":  "",
+		 "title" : "",
+		 "status":  "",
 		 "cellId": "",
 		 "imgUrl": "",
 		 "isHistory": false,

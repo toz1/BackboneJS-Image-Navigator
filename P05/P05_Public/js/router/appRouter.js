@@ -28,12 +28,14 @@ define( ['order!jquery',
                 function2: function ( id ) {
                 },
                 root: function() {
-                	
+                	console.log("root");
                     //centerView.render();
                 },
             
                 initialize:function(){
+                	//subscribe Backbone to the browser’s hash changes
                  Backbone.history.start();
+                 $.mobile.initializePage();
                 }
             } );
 
