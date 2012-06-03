@@ -85,11 +85,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			this.divId = realCurrentId + "-r2c2";
 			
-			
-
-			
-			
-			
 			//check if divId already exists
 			for ( var a in this.collection.models) {
 				if (this.divId == this.collection.models[a].get("divId")){
@@ -105,6 +100,7 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			
 			//
+			console.log(":::ID "+ this.id +"ASSIGNING::::::: cellId: "+this.model.get("cellId")+"  divId: "+this.model.get("divId"));
 			
 			this.vars.cell = this.divId;
 			this.vars.depth = this.collection.getDepth();
@@ -144,67 +140,24 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 
 
-			var template = _.template(tpl, this.vars);
+			var tmpl = _.template(tpl, this.vars);
 
 			if (this.collection.getDepth() == 0) {
 				this.el =$("#" + this.vars.cell);
-				this.el.replaceWith(template);
+				this.el.replaceWith(tmpl);
 				this.setElement($("#" + this.vars.cell));
 			}
 			else {
-				/*
-				var foundAvailDiv =false;
-				var availableDiv1 = $("div[data-role='page']").filter(":not('#homePage')").filter(":not(.ui-page-active)");
-				console.log("::1 "+availableDiv1.length);
-				var avai = $("div[data-role='header']");
-				console.log("::2 "+availableDiv1);
-				console.log("::3 "+avai);
-				//console.log("availableDiv id ",availableDiv1.attr("id"));
-				for ( var aa = 0; aa < availableDiv1.length; aa++) {
-				console.log(aa + " :availableDiv1 ",availableDiv1[aa]);
-				}
-				for ( var a = 0; a < availableDiv1.length; a++) {
-					// replace the existing div until all are replaced, then add new ones
-					//TODO see if I can always add DIV, and not replace
-					//TODO once the binding of the removing of the model and the removing of the html DIV
-					// is implemented: remove the replace mechanism
-					//TODO review this
-					if ($(availableDiv1[a]).attr("depth") == this.collection
-							.getDepth() - 1
-							&& this.collection.getDepth() < 5) {
-						this.el = $("#"+$(availableDiv1[a]).attr("id"));
-						//this.el=$(availableDiv1[a]);
-						this.el.replaceWith(template);
-							console.log("1............................................. "+$(availableDiv1[a]).attr("id"));
-
-						this.setElement($("#"+$(availableDiv1[a]).attr("id")));
-						//for(var c in this.el){
-						if(!this.el){
-							console.log("FAIL "+$(availableDiv1[a]).attr("id"));
-							this.el = $("#"+$(availableDiv1[a]).attr("id"));
-							this.el.replaceWith(template);
-							this.setElement($("#"+$(availableDiv1[a]).attr("id")));
-						};
-						//}
-					
-						
-						foundAvailDiv = true;
-						break;
-					}
-				}
-					if(!foundAvailDiv){*/
-						console.log("*************************************** ");
 
 					this.el = $("#container");
-					this.el.append(template);
+					this.el.append(tmpl);
 					this.setElement($("#"+this.vars.cell));
-					//} 
 			}
 			
 
 			//check if the image of the target of the nav is already loaded
 			
-			var vars = this.vars;
+			//var vars = this.vars;
 			//TODO condense this
 			for (var b in this.collection.models){
 				var tmId = this.collection.models[b].get("divId");
@@ -249,7 +202,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			//
 
 			var image = new Image();
-			console.log("SETTING SRC TO: "+this.el+" <> "+this.vars.cell);
 			image.onload = this.onImgLoad;
 			
 			image.src = this.model.get('imgUrl');
@@ -259,15 +211,17 @@ define([ 'jquery', 'underscore', 'backbone',
 		
 		
 		  onImgLoad :  function(e){
-			  	//make sure the replacing of the image does not interfer with the templating
-				var imgTag = $("#imContainer","#" + this.vars.cell);
-				console.log("replacing "+this.model.get("cellId"));
-				console.log("replacing2 "+$(imgTag).find("img"));
+
+				var imgTag = $("#imContainer","#" + this.model.get("divId"));
 				
-				console.log("ha "+this.vars.cell);
+				for(var f in this.vars){
+					
+					console.log(f+" > "+this.vars[f]);
+					
+				}
+				
 				$(imgTag).find("img").replaceWith(e.target);
-				console.log(":>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> "+this.vars.cell);
-				if(this.vars.cell == "r2c2-r2c2"){
+				if(this.model.get("divId") == "r2c2-r2c2"){
 
 					this.router.navigate("nav/fade/r2c2-r2c2", {trigger: true});
 					
@@ -321,9 +275,8 @@ define([ 'jquery', 'underscore', 'backbone',
 		initialize : function() {
 			
 
-			
+			console.log("INITIALAZING VIEW " +this.model.get("cellId")+"  >> "+this.model.get("divId"));
 			this.onImgLoad = _.bind(this.onImgLoad, this);			  
-
 			
 			this.model.on("remove", this.onModelRemove, this);
 			this.model.on("idChange", this.onIdChange, this);
