@@ -103,6 +103,9 @@ define([ 'jquery', 'underscore', 'backbone',
 			var vars = {};
 			
 			vars.cell = this.divId;
+			vars.word = this.model.get("word");
+			console.log(">>>//// "+this.model.get("caption"));
+			vars.caption = this.model.get("caption");
 			vars.depth = this.collection.getDepth();
 
 			

@@ -7,7 +7,7 @@ define([
 	  
 	defaults: {
 		 "word":  "",
-		 "title" : "",
+		 "caption" : "default caption",
 		 "status":  "",
 		 //cellId is referencing the position inside a grid system from row 1 collumn 1 (r1c1) to row 3 collumn 3 (r3c3)
 		 "cellId": "",

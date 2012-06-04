@@ -87,7 +87,7 @@ overflow: visible;
 }
 #txtView {
 	
-position:fixed;
+position:relative;
 z-index: 8;	
 left:0;
 	

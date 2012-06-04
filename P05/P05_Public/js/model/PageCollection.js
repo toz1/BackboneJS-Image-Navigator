@@ -104,9 +104,8 @@ define(
 				},
 				
 				// success getting the Flickr API
-				flickrSuccess : function(model, data) {
-					console.log("flickr success");
-				
+				flickrSuccess : function(m, data) {
+					//where m is FlickrProxy and data is the response
 					
 					//select from the list the image with the correct orientation
 					var index = -1;
@@ -136,7 +135,14 @@ define(
 					+ ".staticflickr.com/" + photo.server + "/"
 					+ photo.id + "_" + photo.secret + "_"
 					+ resolution + ".jpg";
-					this.assignUrl(model.word, imgUrl, photo.title);
+					
+					for (var f in m){
+						
+						console.log(f+ " > "+m[f]);
+						
+					}
+					
+					this.assignUrl(m.word, imgUrl, photo.title);
 					} else {
 						
 						console.log(">>>> no result found in flickr");
@@ -144,8 +150,8 @@ define(
 					}
 
 				},// end success function
-				assignUrl : function(word, imgUrl, title) {
-					console.log("word: "+ word +" assignUrl: "+imgUrl+"  title: "+title);
+				assignUrl : function(word, imgUrl, caption) {
+					console.log("word: "+ word +" assignUrl: "+imgUrl+ " CAPTION "+caption);
 
 					// iterate through the model and give them an imgUrl
 					// if they don't have one
@@ -157,6 +163,11 @@ define(
 								console.log("need url "+m.get("word"));
 							if (m.get("status") == "awaitUrl" && m.get("word") == word) {
 								console.log("?? awaitUlr");
+
+								m.set("caption", caption, {
+									silent : true
+								});
+								
 								m.set("imgUrl", imgUrl, {
 									silent : true
 								});
@@ -203,7 +214,7 @@ define(
 					
 				},
 				
-				// Query Flickr with the words from Presage
+				// on presage success, Query Flickr with the words from Presage
 				loadPresageImgs : function(w) {
 					console.log("[PageCollection] loadPresageImgs");
 				//
