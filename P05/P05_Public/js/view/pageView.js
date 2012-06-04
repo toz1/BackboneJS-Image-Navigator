@@ -62,8 +62,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			$("#"+this.divId).remove();
 
 		},
-		
-		vars : {},
 
 		render : function() {
 			console.log("-- > RENDERING | word: "+this.model.get('word')+" | cellId: "+this.model.get('cellId'));
@@ -102,16 +100,18 @@ define([ 'jquery', 'underscore', 'backbone',
 			//
 			console.log(":::ID "+ this.id +"ASSIGNING::::::: cellId: "+this.model.get("cellId")+"  divId: "+this.model.get("divId"));
 			
-			this.vars.cell = this.divId;
-			this.vars.depth = this.collection.getDepth();
+			var vars = {};
+			
+			vars.cell = this.divId;
+			vars.depth = this.collection.getDepth();
 
 			
 
 			//define the links to the next pages
-			this.vars.topNav = realCurrentId + "-r1c2-r2c2";
-			this.vars.rightNav = realCurrentId + "-r2c3-r2c2";
-			this.vars.bottomNav = realCurrentId + "-r3c2-r2c2";
-			this.vars.leftNav = realCurrentId + "-r2c1-r2c2";
+			vars.topNav = realCurrentId + "-r1c2-r2c2";
+			vars.rightNav = realCurrentId + "-r2c3-r2c2";
+			vars.bottomNav = realCurrentId + "-r3c2-r2c2";
+			vars.leftNav = realCurrentId + "-r2c1-r2c2";
 
 			// change the link pointing to the page we are coming from 
 			//TODO keep memory of all pages visited
@@ -119,88 +119,67 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			switch(this.model.get('cellId')){
 			case "r1c2":
-				this.vars.bottomNav= prevLink;
+				vars.bottomNav= prevLink;
 				break;
 			case "r2c3":
-				this.vars.leftNav= prevLink;
+				vars.leftNav= prevLink;
 				break;
 			case "r3c2":
-				this.vars.topNav= prevLink;
+				vars.topNav= prevLink;
 				break;
 			case "r2c1":
-				this.vars.rightNav= prevLink;
+				vars.rightNav= prevLink;
 				break;
 			
 			};
 			
-			this.model.set("bottomNav", this.vars.bottomNav);
-			this.model.set("leftNav", this.vars.leftNav);
-			this.model.set("topNav", this.vars.topNav);
-			this.model.set("rightNav", this.vars.rightNav);
+			this.model.set("bottomNav", vars.bottomNav);
+			this.model.set("leftNav", vars.leftNav);
+			this.model.set("topNav", vars.topNav);
+			this.model.set("rightNav", vars.rightNav);
 			
 
 
-			var tmpl = _.template(tpl, this.vars);
+			var tmpl = _.template(tpl, vars);
 
 			if (this.collection.getDepth() == 0) {
-				this.el =$("#" + this.vars.cell);
+				this.el =$("#" + vars.cell);
 				this.el.replaceWith(tmpl);
-				this.setElement($("#" + this.vars.cell));
+				this.setElement($("#" + vars.cell));
 			}
 			else {
 
 					this.el = $("#container");
 					this.el.append(tmpl);
-					this.setElement($("#"+this.vars.cell));
+					this.setElement($("#"+vars.cell));
 			}
 			
 
 			//check if the image of the target of the nav is already loaded
 			
-			//var vars = this.vars;
 			//TODO condense this
 			for (var b in this.collection.models){
 				var tmId = this.collection.models[b].get("divId");
-				if (tmId == this.vars.bottomNav && this.collection.models[b].get("imgLoaded") == true){
-					//this.collection.models[b].trigger("displayLinkEvent",this.collection.models[b].get("divId"));
-					//this.collection.models[b].displayLink(tmId);
-					this.displayLink(this.vars.bottomNav);
+				if (tmId == vars.bottomNav && this.collection.models[b].get("imgLoaded") == true){
+					this.displayLink(vars.bottomNav);
 				}
 				
-				if (tmId == this.vars.topNav && this.collection.models[b].get("imgLoaded") == true){
-					//this.collection.models[b].trigger("displayLinkEvent",this.collection.models[b].get("divId"));
-					//this.collection.models[b].displayLink(tmId);
-					this.displayLink(this.vars.topNav);
+				if (tmId == vars.topNav && this.collection.models[b].get("imgLoaded") == true){
+					this.displayLink(vars.topNav);
 				}
 				
-				if (tmId == this.vars.leftNav && this.collection.models[b].get("imgLoaded") == true){
-					//this.collection.models[b].trigger("displayLinkEvent",this.collection.models[b].get("divId"));
-					//this.collection.models[b].displayLink(tmId);
-					this.displayLink(this.vars.leftNav);
-					//console.log("STYLE: "+document.getElementById('navLeft').style);
-					//$('.navL').css('-webkit-transform', 'rotate(-45deg)');
+				if (tmId == vars.leftNav && this.collection.models[b].get("imgLoaded") == true){
+					this.displayLink(vars.leftNav);
 
 				}
 				
-				if (tmId == this.vars.rightNav && this.collection.models[b].get("imgLoaded") == true){
-					//this.collection.models[b].trigger("displayLinkEvent",this.collection.models[b].get("divId"));
-					//this.collection.models[b].displayLink(tmId);
-					this.displayLink(this.vars.rightNav);
+				if (tmId == vars.rightNav && this.collection.models[b].get("imgLoaded") == true){
+					this.displayLink(vars.rightNav);
 
 				}
 				
 			}
 			
-			//var targetModel = _.filter(this.collection.models, function(m){ return (m.get("divId") == vars.rightNav
-			//
-			
-			
-			// add a load complete listener to the images
-			//this.vars.url = this.model.get('imgUrl');
-
-
-			//
-
 			var image = new Image();
 			image.onload = this.onImgLoad;
 			
@@ -213,12 +192,6 @@ define([ 'jquery', 'underscore', 'backbone',
 		  onImgLoad :  function(e){
 
 				var imgTag = $("#imContainer","#" + this.model.get("divId"));
-				
-				for(var f in this.vars){
-					
-					console.log(f+" > "+this.vars[f]);
-					
-				}
 				
 				$(imgTag).find("img").replaceWith(e.target);
 				if(this.model.get("divId") == "r2c2-r2c2"){
@@ -235,7 +208,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			},
 		newImgLoaded : function(id){
 			
-
 			if(this.model.get('divId') != "" && this.model.get('divId')!= id){
 			this.displayLink(id);
 			}
