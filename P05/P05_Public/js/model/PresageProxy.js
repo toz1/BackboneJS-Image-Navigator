@@ -8,7 +8,7 @@ define([
 	  
 	  	url: function() {
 	 
-		 return "http://79.125.127.137/axis2/services/samples.Calculator/Word/context="+this.context;
+		 return "http://54.247.179.56/axis2/services/samples.Calculator/Word/context="+this.context;
 		 },
 		  // Map from CRUD to HTTP for our default `Backbone.sync` implementation.
 		  methodMap : {

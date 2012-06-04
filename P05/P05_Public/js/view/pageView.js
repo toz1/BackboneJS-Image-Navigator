@@ -98,13 +98,11 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			
 			//
-			console.log(":::ID "+ this.id +"ASSIGNING::::::: cellId: "+this.model.get("cellId")+"  divId: "+this.model.get("divId"));
 			
 			var vars = {};
 			
 			vars.cell = this.divId;
 			vars.word = this.model.get("word");
-			console.log(">>>//// "+this.model.get("caption"));
 			vars.caption = this.model.get("caption");
 			vars.depth = this.collection.getDepth();
 
@@ -221,27 +219,53 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			
 			var m = this.model;
+			var l;
+			var w;
+			
+			for (var b in this.collection.models){
+				
+				if (this.collection.models[b].get("divId") == link){
+				w = this.collection.models[b].get("word");	
+					
+				}
+				
+			}
+			
+			//var targetModel = _.find(this.collection, function(n){ return n.get("divId") == m.get('bottomNav'); });
+			//var w = targetModel.get("word");
+			
+			//for (var b in this.collection.models){
+				
+				//console.log(">> >> "+w);
+				
+			//}
+			
 			
 			
 			switch(link){
 			
 			
 			case m.get('bottomNav'):
-				$('#navBottom','#'+m.get("divId")).css("display","block");
+				l = '#navBottom';
 				break;
 			
 			case m.get('leftNav'):
-				$('#navLeft','#'+m.get("divId")).css("display","block");
+				l = '#navLeft';
 				break;
 			case m.get('topNav'):
-				$('#navTop','#'+m.get("divId")).css("display","block");
+				l = '#navTop';
 				break;
 			case m.get('rightNav'):
-				$('#navRight','#'+m.get("divId")).css("display","block");
+				l = '#navRight';
 				break;
 				
 			
 			}
+			
+			console.log(">?>?>?>?>  "+$('#'+m.get("divId")).find(l).text(w));
+			
+			$('#'+m.get("divId")).find(l).css("display","block");
+
 			
 		},
 		

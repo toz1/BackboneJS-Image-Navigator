@@ -136,12 +136,6 @@ define(
 					+ photo.id + "_" + photo.secret + "_"
 					+ resolution + ".jpg";
 					
-					for (var f in m){
-						
-						console.log(f+ " > "+m[f]);
-						
-					}
-					
 					this.assignUrl(m.word, imgUrl, photo.title);
 					} else {
 						
