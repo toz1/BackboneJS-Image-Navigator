@@ -92,6 +92,7 @@ define(
 					
 					//fetch Flickr for the searchValue image
 					//success is handled by flickrSuccess
+					//(subsequent flickr calls are done in loadPresageImgs()
 					flickrProxy = new FlickrProxy;
 					flickrProxy.word = searchValue;
 					flickrProxy.fetch(flickrFetchOpt);
@@ -99,12 +100,14 @@ define(
 					//set presage context to searchValue
 					//presage will be fetched in pageChangedHandler
 					//once the searchValue image is displayed
-					//success is handled by presageSuccess
+					//success is handled by presageSuccess.
+					//subsequent setting of context are done in
 					presageProxy.context = searchValue;
 				},
 				
 				// success getting the Flickr API
 				flickrSuccess : function(m, data) {
+					console.log("FLICKR SUCCESS")
 					//where m is FlickrProxy and data is the response
 					
 					//select from the list the image with the correct orientation
@@ -188,7 +191,7 @@ define(
 				// success getting the Presage API
 				// TODO test with the words "page", "likw" 
 				presageSuccess : function(model, data) {
-					
+					console.log("PRESAGE SUCCESS");
 				var result = $(data.firstChild.firstChild).siblings();
 				var arr = [];
 				for (var a=0 ; a< result.length ; a++){
@@ -390,7 +393,12 @@ define(
 					//currentPage is undefined on the first pageChange
 					//happening when initializing JQM (before any image is loaded)
 					//
-					if (currentPage)presageProxy.fetch(presageFetchOpt);
+					if (currentPage)
+						{
+						//console.log("PRESAGE FETCH");
+						//presageProxy.context = searchValue;
+						//presageProxy.fetch(presageFetchOpt);
+						}
 					
 					//TODO: if moving backwards, need to remove all 3 model, view and tag that are at level n+1 (waiting 
 					//to be displayed but that are long longer needed
@@ -404,22 +412,41 @@ define(
 					//
 					//
 					
+					console.log("currentPage "+currentPage);
+					console.log("depth "+depth);
 					
-					if (currentPage !="r2c2" && depth != 0) {
+					if (depth != 0) {
 
 						
 
 						for ( var aa = models.length - 1; aa >= 0; aa--) {
 							//remove all unused models and give the other the isHistory = true
-							if ((models[aa].get("cellId") !== currentPage)
-									&& (models[aa].get("cellId") !== "r2c2")
-									&& (models[aa].get("isHistory") !== true))
+							if ((models[aa].get("cellId") != currentPage)
+									&& (models[aa].get("cellId") != "r2c2")
+									&& (models[aa].get("isHistory") != true))
 							{
 								Col.remove(models[aa]);
 							} else {
+								console.log("00 PRESAGE FETCH");
+								console.log(".. cellId "+models[aa].get("cellId"));
+								console.log(".. word "+models[aa].get("word"));
+								//presageProxy.context = models[aa].get("word");
+								//presageProxy.fetch(presageFetchOpt);
 								models[aa].set({'isHistory': true});
 
 							}
+							//TODO unessessary calls arriving here
+							
+							console.log("x word "+models[aa]);
+							if(models[aa]){
+							if(models[aa].get("cellId") == currentPage && models[aa].get("word")){
+							//TODO this is called 4 times insted of one	
+							console.log("11 PRESAGE FETCH");
+							console.log("xx cellId "+models[aa].get("cellId"));
+							console.log("xxx word "+models[aa].get("word"));
+							presageProxy.context = models[aa].get("word");
+							presageProxy.fetch(presageFetchOpt);
+							}}
 							//XXX check if keeping the history models is not going to screw cellLoaded
 							cellLoaded = 2;
 						}

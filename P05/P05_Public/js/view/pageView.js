@@ -216,12 +216,15 @@ define([ 'jquery', 'underscore', 'backbone',
 		},
 		
 		displayLink : function(link){
-			
+			//TODO unacessary calls are done
+			console.log("+++> "+link);
 			
 			var m = this.model;
 			var l;
 			var w;
 			
+			
+			//finds the (presage predicted) word for that link
 			for (var b in this.collection.models){
 				
 				if (this.collection.models[b].get("divId") == link){
@@ -230,17 +233,6 @@ define([ 'jquery', 'underscore', 'backbone',
 				}
 				
 			}
-			
-			//var targetModel = _.find(this.collection, function(n){ return n.get("divId") == m.get('bottomNav'); });
-			//var w = targetModel.get("word");
-			
-			//for (var b in this.collection.models){
-				
-				//console.log(">> >> "+w);
-				
-			//}
-			
-			
 			
 			switch(link){
 			
@@ -262,10 +254,17 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			}
 			
-			console.log(">?>?>?>?>  "+$('#'+m.get("divId")).find(l).text(w));
+			console.log("  > "+l);
+			
+			//add the word to the navigation and displays it
+			
+			if(l && $("#"+m.get("divId")).find(l).find('.ui-btn-text').html()){
+			
+			$('#'+m.get("divId")).find(l).find('.ui-btn-text').html(w);
 			
 			$('#'+m.get("divId")).find(l).css("display","block");
-
+			
+			}
 			
 		},
 		
