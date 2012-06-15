@@ -359,7 +359,6 @@ define(
 					var currentCell;
 					// get the divId of the new page (complete concatenated id)
 					var currentId = $(data.toPage).attr("id");
-					console.log("ID========================= >>>>>>>>>>>>>>> "+ $(data.toPage).attr("id"));
 					
 					if(currentId != "r2c2"){
 						
@@ -412,8 +411,8 @@ define(
 
 						
 
+						//remove all unused models and give the other the isHistory = true
 						for ( var aa = models.length - 1; aa >= 0; aa--) {
-							//remove all unused models and give the other the isHistory = true
 							if ((models[aa].get("cellId") != currentCell)
 									&& (models[aa].get("cellId") != "r2c2")
 									&& (models[aa].get("isHistory") != true))
@@ -430,17 +429,11 @@ define(
 							}
 						}
 							
-							//TODO review this and models list here
+						//loop through  the remaining models: fetch Presage with the new word and create new models
 						for ( var b = 0; b < models.length ; b++) {	
 							if(models[b]){
-								for (var uu in models){
-									console.log(uu+" model "+ models[uu].get("divId"));
-								}
-								console.log(b+" [PageCollection] pageChangedHandler models[b].get('divId') "+models[b].get("divId"));
 							if(models[b].get("divId") == currentId && models[b].get("word")){
-								console.log("@@ > divId: "+models[b].get("divId")+" currentId: "+currentId+ " word: "+models[b].get("word"));
 
-							//TODO this is called 4 times insted of one	
 							console.log("11 PRESAGE FETCH");
 							console.log("xx cellId "+models[b].get("cellId"));
 							console.log("xxx word "+models[b].get("word"));

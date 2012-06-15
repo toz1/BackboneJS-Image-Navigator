@@ -82,7 +82,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			//this.divId = realCurrentId == "r2c2-r2c2" ? "r2c2-r2c2" : realCurrentId + "-r2c2";
 			
 			this.divId = realCurrentId + "-r2c2";
-			
 			//check if divId already exists
 			for ( var a in this.collection.models) {
 				if (this.divId == this.collection.models[a].get("divId")){
@@ -92,7 +91,6 @@ define([ 'jquery', 'underscore', 'backbone',
 				}
 			}
 			
-
 			this.model.set("divId", this.divId);
 			//
 			
@@ -115,7 +113,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			vars.leftNav = realCurrentId + "-r2c1-r2c2";
 
 			// change the link pointing to the page we are coming from 
-			//TODO keep memory of all pages visited
 			var prevLink = this.collection.getDepth() == 1 ? "r2c2-r2c2" : this.collection.getHistory()+"r2c2";
 			
 			switch(this.model.get('cellId')){
@@ -140,7 +137,6 @@ define([ 'jquery', 'underscore', 'backbone',
 			this.model.set("rightNav", vars.rightNav);
 			
 
-
 			var tmpl = _.template(tpl, vars);
 
 			if (this.collection.getDepth() == 0) {
@@ -159,9 +155,13 @@ define([ 'jquery', 'underscore', 'backbone',
 			//check if the image of the target of the nav is already loaded
 			
 			//TODO condense this
+			
+			console.log("bottom nav  "+vars.bottomNav);
+			
 			for (var b in this.collection.models){
 				var tmId = this.collection.models[b].get("divId");
 				if (tmId == vars.bottomNav && this.collection.models[b].get("imgLoaded") == true){
+					console.log("display bottom nav")
 					this.displayLink(vars.bottomNav);
 				}
 				
@@ -254,15 +254,15 @@ define([ 'jquery', 'underscore', 'backbone',
 			
 			}
 			
-			console.log("  > "+l);
-			
 			//add the word to the navigation and displays it
 			
-			if(l && $("#"+m.get("divId")).find(l).find('.ui-btn-text').html()){
+			var btn = $("#"+m.get("divId")).find(l);
 			
-			$('#'+m.get("divId")).find(l).find('.ui-btn-text').html(w);
+			if(l){
+			btn.css("display","block");
 			
-			$('#'+m.get("divId")).find(l).css("display","block");
+			//if the page has been initialized by JQM, then '.ui-btn-text' exists and the text can be replaced
+			if(btn.find('.ui-btn-text').html()) btn.find('.ui-btn-text').html(w);
 			
 			}
 			
