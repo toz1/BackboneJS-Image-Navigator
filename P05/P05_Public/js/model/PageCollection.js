@@ -195,7 +195,7 @@ define(
 				var result = $(data.firstChild.firstChild).siblings();
 				var arr = [];
 				for (var a=0 ; a< result.length ; a++){
-					
+					// TODO check if the order of the words is always the same
 					console.log(a+" .... "+result[a].textContent);
 					arr.push(result[a].textContent);
 				}
@@ -218,7 +218,7 @@ define(
 				// adding the models will instantiate all the view.
 				// The views will only be rendered on "renderEvent"
 				// binding to this event is done in pageView initialize	
-				this.add(this.defaults);
+				//this.add(this.defaults);
 				
 				// fetch the images attributes from Flickr for the first time only
 				// subsequent fetch are done in pageChangedHandler();
@@ -232,6 +232,7 @@ define(
 						var _w = w.shift();
 						
 						this.models[a].set("word",_w);
+						console.log(a+ " model>  "+this.models[a].get("word") );
 
 						flickrProxy = new FlickrProxy;
 						flickrProxy.word = _w;
@@ -354,20 +355,22 @@ define(
 					
 
 
-					// get the id of the new page
-					var currentPage;
-					console.log("DEPTH "+depth);
+					// get the cellId of the new page (this is the short id, composed of 4 characters)
+					var currentCell;
+					// get the divId of the new page (complete concatenated id)
+					var currentId = $(data.toPage).attr("id");
+					console.log("ID========================= >>>>>>>>>>>>>>> "+ $(data.toPage).attr("id"));
 					
-					if($(data.toPage).attr("id") != "r2c2"){
+					if(currentId != "r2c2"){
 						
-						var cArray = $(data.toPage).attr("id").split("-");
+						var cArray = currentId.split("-");
 						// get the second to last (last being r2c2)
 						cArray.pop();
-						currentPage = cArray.pop();
+						currentCell = cArray.pop();
 
 					} else {
 
-						currentPage = "r2c2";
+						currentCell = "r2c2";
 
 					}
 
@@ -380,25 +383,15 @@ define(
 						//case moving forward
 						isBackward = false;
 						depth ++;
-						this.memorize(currentPage);
+						this.memorize(currentCell);
 					} else if (newPageDepth == depth-2){
 						//case moving backward
 						isBackward = true;
-						currentPage = this.oppositeCell(currentPage);
+						currentCell = this.oppositeCell(currentCell);
 						this.forgetLastStep();
 						depth --;
 					}
 
-					
-					//currentPage is undefined on the first pageChange
-					//happening when initializing JQM (before any image is loaded)
-					//
-					if (currentPage)
-						{
-						//console.log("PRESAGE FETCH");
-						//presageProxy.context = searchValue;
-						//presageProxy.fetch(presageFetchOpt);
-						}
 					
 					//TODO: if moving backwards, need to remove all 3 model, view and tag that are at level n+1 (waiting 
 					//to be displayed but that are long longer needed
@@ -412,7 +405,7 @@ define(
 					//
 					//
 					
-					console.log("currentPage "+currentPage);
+					console.log("currentCell "+currentCell);
 					console.log("depth "+depth);
 					
 					if (depth != 0) {
@@ -421,7 +414,7 @@ define(
 
 						for ( var aa = models.length - 1; aa >= 0; aa--) {
 							//remove all unused models and give the other the isHistory = true
-							if ((models[aa].get("cellId") != currentPage)
+							if ((models[aa].get("cellId") != currentCell)
 									&& (models[aa].get("cellId") != "r2c2")
 									&& (models[aa].get("isHistory") != true))
 							{
@@ -435,16 +428,23 @@ define(
 								models[aa].set({'isHistory': true});
 
 							}
-							//TODO unessessary calls arriving here
+						}
 							
-							console.log("x word "+models[aa]);
-							if(models[aa]){
-							if(models[aa].get("cellId") == currentPage && models[aa].get("word")){
+							//TODO review this and models list here
+						for ( var b = 0; b < models.length ; b++) {	
+							if(models[b]){
+								for (var uu in models){
+									console.log(uu+" model "+ models[uu].get("divId"));
+								}
+								console.log(b+" [PageCollection] pageChangedHandler models[b].get('divId') "+models[b].get("divId"));
+							if(models[b].get("divId") == currentId && models[b].get("word")){
+								console.log("@@ > divId: "+models[b].get("divId")+" currentId: "+currentId+ " word: "+models[b].get("word"));
+
 							//TODO this is called 4 times insted of one	
 							console.log("11 PRESAGE FETCH");
-							console.log("xx cellId "+models[aa].get("cellId"));
-							console.log("xxx word "+models[aa].get("word"));
-							presageProxy.context = models[aa].get("word");
+							console.log("xx cellId "+models[b].get("cellId"));
+							console.log("xxx word "+models[b].get("word"));
+							presageProxy.context = models[b].get("word");
 							presageProxy.fetch(presageFetchOpt);
 							}}
 							//XXX check if keeping the history models is not going to screw cellLoaded
@@ -452,7 +452,7 @@ define(
 						}
 
 						// the cell, once the transition is done, become the opposite, relatively to the center r2c2
-						lastCell= this.oppositeCell(currentPage);
+						lastCell= this.oppositeCell(currentCell);
 
 						// By merging the current models and the default,
 						// it adds 3 new models for the possible upcoming pages. 
@@ -469,12 +469,13 @@ define(
 								&& Col.defaults[a]["cellId"] != lastCell) {
 
 
-								//in the case backward: ignore the currentpage
-								if( !isBackward  || isBackward && Col.defaults[a]["cellId"] !=currentPage){
+								//in the case backward: ignore the currentCell
+								if( !isBackward  || isBackward && Col.defaults[a]["cellId"] !=currentCell){
 
+									//
 									Col.add(Col.defaults[a]);
-									console.log("PageCollection flickrProxy.fetch");
-									flickrProxy.fetch(flickrFetchOpt);
+									console.log("adding default models");
+									//flickrProxy.fetch(flickrFetchOpt);
 								}
 							}
 
