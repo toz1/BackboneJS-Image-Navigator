@@ -1,7 +1,7 @@
 define(
-		[ 'jquery', 'underscore', 'backbone', 'model/PageModel',
+		[ 'jquery', 'backbone', 'model/PageModel',
 		  'model/FlickrProxy', 'model/PresageProxy'],
-		  function($, _, Backbone, PageModel, FlickrProxy, PresageProxy) {
+		  function($, Backbone, PageModel, FlickrProxy, PresageProxy) {
 
 
 

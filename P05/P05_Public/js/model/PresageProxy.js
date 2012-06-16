@@ -1,14 +1,11 @@
-define([
-  'underscore',
-  'backbone'
-], function(_, Backbone) {
+define(['backbone'],function(Backbone) {
   var PresageProxy = Backbone.Model.extend({
 	  	//the presage context
 	  	context: "",
 	  
 	  	url: function() {
 	 
-		 return "http://79.125.118.30/axis2/services/samples.Calculator/Word/context="+this.context;
+		 return "http://54.247.191.177/axis2/services/samples.Calculator/Word/context="+this.context;
 		 },
 		  // Map from CRUD to HTTP for our default `Backbone.sync` implementation.
 		  methodMap : {

@@ -1,7 +1,4 @@
-define([
-  'underscore',
-  'backbone'
-], function(_, Backbone) {
+define(['backbone'],function(Backbone) {
   var FlickrProxy = Backbone.Model.extend({
 	  
   	word: "",

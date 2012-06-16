@@ -1,8 +1,4 @@
-define([
-  'underscore',
-  'backbone'
-
-], function(_, Backbone, pageView) {
+define(['backbone'],function(Backbone) {
   var pageModel = Backbone.Model.extend({
 	  
 	defaults: {

@@ -1,9 +1,8 @@
-define( ['order!jquery',
-         'order!jqueryMobile',
-         'order!underscore', 
-         'order!backbone'
+define( ['jquery',
+         'jqueryMobile',
+         'backbone'
          ],
-        function( $, $$, _, Backbone) {
+        function( $, $$, Backbone) {
             // Using ECMAScript 5 strict mode during development. By default r.js will ignore that.
             "use strict";
             var AppRouter = Backbone.Router.extend( {

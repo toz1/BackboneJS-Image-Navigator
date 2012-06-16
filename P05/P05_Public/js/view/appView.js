@@ -1,5 +1,5 @@
-define([ 'jquery', 'underscore', 'backbone', 'view/pageView','model/PresageProxy' ], 
-function($, _, Backbone, pageView, PresageProxy) {
+define([ 'jquery', 'backbone', 'view/pageView','model/PresageProxy' ], 
+function($, Backbone, pageView, PresageProxy) {
 	// Using ECMAScript 5 strict mode during development. By default r.js will ignore that.
 	"use strict";
 

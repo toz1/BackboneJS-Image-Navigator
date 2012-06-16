@@ -1,5 +1,5 @@
-define([ 'jquery', 'underscore', 'backbone',
-		'text!../../html/pageView_tpl.html' ], function($, _, Backbone, tpl) {
+define([ 'jquery', 'backbone', 
+		'text!../../html/pageView_tpl.html' ], function($, Backbone, tpl) {
 	// Using ECMAScript 5 strict mode during development. By default r.js will ignore that.
 	"use strict";
 	var pageView = Backbone.View.extend({

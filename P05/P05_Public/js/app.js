@@ -1,12 +1,10 @@
 define([
-        'order!jquery',
-        'order!jqueryMobile',
-        'order!underscore',
-        'order!backbone',
-        'order!router/appRouter',
-        'order!view/appView',
-        'order!model/PageCollection' 
-      ], function($, $$, _, Backbone, AppRouter, appView, PageCollection){
+        'jquery',
+        'jqueryMobile',
+        'router/appRouter',
+        'view/appView',
+        'model/PageCollection' 
+      ], function($, $$, AppRouter, appView, PageCollection){
         var init = function(){
         	
         	// let Backbone handle the routing
