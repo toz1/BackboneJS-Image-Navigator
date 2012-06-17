@@ -9,6 +9,10 @@ require.config({
   },
   
   shim: {
+	  	underscore: {
+	  		exports: '_'
+	  	},
+	  
         backbone: {
             deps: ['lodash', 'jquery'],
             exports: 'Backbone'
