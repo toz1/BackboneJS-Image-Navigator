@@ -18,10 +18,6 @@ function($, Backbone, pageView, PresageProxy) {
 		setRouter : function(r){
 			console.log("[appView] router is set");
 			this.router = r;
-			//!!!!!!!!!!!!!!!!!!! LOAD INIT IMAGES ON INPUT !!!!!!!!!!!!!
-			// here because the view need to be ready to catch the add events
-			//View is ready, load images
-			//this.collection.loadInitImgs();
 		},
 		onAdd : function(m) {
 			var pView = new pageView({
@@ -42,7 +38,6 @@ function($, Backbone, pageView, PresageProxy) {
 
 		
 		initialize : function() {
-			console.log("INIT appView");
 			this.collection.bind('add', this.onAdd, this);
 		}
 	});

@@ -6,7 +6,7 @@
 	dir: 'P05_Public/build',
 	preserveLicenseComments: false,
 	paths: {
-		'requiredLib' : 'lib/almond-0.1.1'
+		'requiredLib' : 'lib/require-2.0.2'
 	},
 	name: 'main',
 	include: 'requiredLib',

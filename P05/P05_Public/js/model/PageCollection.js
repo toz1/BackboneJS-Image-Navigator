@@ -65,15 +65,13 @@ define(
 
 					// 
 					// binding to get a reference to this inside the functions
-					this.beforeChange = _.bind(this.beforeChange, this);
+					//this.beforeChange = _.bind(this.beforeChange, this);
 
 					this.pageChangedHandler = _.bind(this.pageChangedHandler, this);
 
 					$(document).bind("pagechange",
 							this.pageChangedHandler);
 
-
-					$(document).bind("pagebeforechange", this.beforeChange);
 
 					// end document
 					// bind
@@ -92,16 +90,17 @@ define(
 					
 					//fetch Flickr for the searchValue image
 					//success is handled by flickrSuccess
+					// and navigation to the page is done in paveView onImgLoad()
 					//(subsequent flickr calls are done in loadPresageImgs()
-					flickrProxy = new FlickrProxy;
+					var flickrProxy = new FlickrProxy;
 					flickrProxy.word = searchValue;
 					flickrProxy.fetch(flickrFetchOpt);
 					
-					//set presage context to searchValue
+					//set presage context
 					//presage will be fetched in pageChangedHandler
-					//once the searchValue image is displayed
+					//( when the image from search is displayed, pageChangedHandler is triggered)
 					//success is handled by presageSuccess.
-					//subsequent setting of context are done in
+					//subsequent setting of context are done in directly in pageChangedHandler
 					presageProxy.context = searchValue;
 				},
 				
@@ -146,7 +145,8 @@ define(
 						
 					}
 
-				},// end success function
+				},
+				
 				assignUrl : function(word, imgUrl, caption) {
 					console.log("word: "+ word +" assignUrl: "+imgUrl+ " CAPTION "+caption);
 
@@ -202,7 +202,7 @@ define(
 				
 				this.loadPresageImgs(arr);
 				
-				},// end success function
+				},
 				
 				
 				presageError : function(model, data){
@@ -220,9 +220,6 @@ define(
 				// binding to this event is done in pageView initialize	
 				//this.add(this.defaults);
 				
-				// fetch the images attributes from Flickr for the first time only
-				// subsequent fetch are done in pageChangedHandler();
-				
 				console.log("[PageCollection] this.models.length "+this.models.length);
 				
 				for ( var a in this.models) {
@@ -234,7 +231,7 @@ define(
 						this.models[a].set("word",_w);
 						console.log(a+ " model>  "+this.models[a].get("word") );
 
-						flickrProxy = new FlickrProxy;
+						var flickrProxy = new FlickrProxy;
 						flickrProxy.word = _w;
 						flickrProxy.fetch(flickrFetchOpt);
 						
@@ -266,31 +263,8 @@ define(
 				},
 				memorize: function(c){
 					memory = memory  + c + "-";
-					
-				
-							// case for the first page where r2c2 has already
-							// been rendered in	assignUrl(), but the other models
-							// still needs to be rendered	
-					
-						//REMOVE
-						//this.renderAll();
-						
-					
+},
 
-
-				},
-				//REMOVE
-				/*
-				renderAll : function () {
-
-						if (memory =="r2c2-" && assignedUrl == 5){
-												for ( var imgMd in models) {
-								var m2 = models[imgMd];
-								// the divId will be attibuted in the view render()
-								if(m2.get("divId") == "")m2.trigger("renderEvent");	
-						}		}
-					
-				},*/
 
 				forgetLastStep: function(){
 
@@ -311,42 +285,6 @@ define(
 						mm.trigger("newImgLoaded", id);
 					
 					}
-
-				},
-				
-
-
-				
-				//direction of the slide movement (up,down,left,right), assigned by the router,
-				//or the functions handling the swipe in pageView.js
-				
-				//transition type
-				mvt : "",
-				
-				setTransitionType : function(trstype){
-					this.mvt = trstype;
-				},
-
-
-				//triggered before the page change
-				beforeChange : function(e, data) {
-					// this is triggered twice by JQM (because I trigger the .changePage), once with a string,
-					// and then a second time with page object created with
-					// .page();
-					// 
-
-
-					if (typeof data.toPage === "string") {
-						$(data.toPage).page();
-						
-						$.mobile.changePage($(data.toPage), {
-							transition : this.mvt,
-							allowSamePageTransition : true,
-							changeHash : false
-						});
-
-						e.preventDefault();
-					}//end if
 
 				},
 				
@@ -404,8 +342,6 @@ define(
 					//
 					//
 					
-					console.log("currentCell "+currentCell);
-					console.log("depth "+depth);
 					
 					if (depth != 0) {
 
@@ -419,11 +355,7 @@ define(
 							{
 								Col.remove(models[aa]);
 							} else {
-								console.log("00 PRESAGE FETCH");
-								console.log(".. cellId "+models[aa].get("cellId"));
-								console.log(".. word "+models[aa].get("word"));
-								//presageProxy.context = models[aa].get("word");
-								//presageProxy.fetch(presageFetchOpt);
+								
 								models[aa].set({'isHistory': true});
 
 							}
@@ -467,8 +399,6 @@ define(
 
 									//
 									Col.add(Col.defaults[a]);
-									console.log("adding default models");
-									//flickrProxy.fetch(flickrFetchOpt);
 								}
 							}
 
