@@ -15,7 +15,6 @@ define([ 'jquery', 'backbone',
 
 			  
 			  setRouter : function (r){
-				  console.log("router is set: "+r);
 				this.router = r;  
 				  
 			  },
@@ -64,7 +63,6 @@ define([ 'jquery', 'backbone',
 		},
 
 		render : function() {
-			console.log("-- > RENDERING | word: "+this.model.get('word')+" | cellId: "+this.model.get('cellId'));
 
 			// the actual id that is not going to be used outside this render function
 			// cellId stays 4 alphanumeric reference to the position (top left is r1c1 etc)
@@ -156,12 +154,10 @@ define([ 'jquery', 'backbone',
 			
 			//TODO condense this
 			
-			console.log("bottom nav  "+vars.bottomNav);
 			
 			for (var b in this.collection.models){
 				var tmId = this.collection.models[b].get("divId");
 				if (tmId == vars.bottomNav && this.collection.models[b].get("imgLoaded") == true){
-					console.log("display bottom nav")
 					this.displayLink(vars.bottomNav);
 				}
 				
@@ -217,7 +213,6 @@ define([ 'jquery', 'backbone',
 		
 		displayLink : function(link){
 			//TODO unacessary calls are done
-			console.log("+++> "+link);
 			
 			var m = this.model;
 			var l;
@@ -273,7 +268,6 @@ define([ 'jquery', 'backbone',
 		initialize : function() {
 			
 
-			console.log("INITIALAZING VIEW " +this.model.get("cellId")+"  >> "+this.model.get("divId"));
 			this.onImgLoad = _.bind(this.onImgLoad, this);			  
 			
 			this.model.on("remove", this.onModelRemove, this);

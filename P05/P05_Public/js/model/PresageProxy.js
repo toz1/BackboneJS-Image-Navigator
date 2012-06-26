@@ -5,7 +5,7 @@ define(['backbone'],function(Backbone) {
 	  
 	  	url: function() {
 	 
-		 return "http://54.247.178.197/axis2/services/samples.Calculator/Word/context="+this.context;
+		 return "http://176.34.179.108/axis2/services/samples.Calculator/Word/context="+this.context;
 		 },
 		  // Map from CRUD to HTTP for our default `Backbone.sync` implementation.
 		  methodMap : {
@@ -69,7 +69,6 @@ define(['backbone'],function(Backbone) {
 
 		    // Don't process data on a non-GET request.
 		    if (params.type !== 'GET' && !Backbone.emulateJSON) {
-		    	console.log("[PresageProxy] params.processData = false;");
 		      params.processData = false;
 		    }
 
@@ -79,7 +78,6 @@ define(['backbone'],function(Backbone) {
 
 		 handler : function(e,d){
 			 for (var a in e){
-			 console.log ("PresageProxy handler: "+a+"  --> "+e[a]);
 			 }
 		 },
 		  // Helper function to get a value from a Backbone object as a property

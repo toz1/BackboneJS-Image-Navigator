@@ -106,7 +106,6 @@ define(
 				
 				// success getting the Flickr API
 				flickrSuccess : function(m, data) {
-					console.log("FLICKR SUCCESS")
 					//where m is FlickrProxy and data is the response
 					
 					//select from the list the image with the correct orientation
@@ -141,14 +140,12 @@ define(
 					this.assignUrl(m.word, imgUrl, photo.title);
 					} else {
 						
-						console.log(">>>> no result found in flickr");
 						
 					}
 
 				},
 				
 				assignUrl : function(word, imgUrl, caption) {
-					console.log("word: "+ word +" assignUrl: "+imgUrl+ " CAPTION "+caption);
 
 					// iterate through the model and give them an imgUrl
 					// if they don't have one
@@ -157,9 +154,7 @@ define(
 					for ( var imgModel in this.models) {
 						var m = this.models[imgModel];
 						if (m.get("imgUrl") == "") {
-								console.log("need url "+m.get("word"));
 							if (m.get("status") == "awaitUrl" && m.get("word") == word) {
-								console.log("?? awaitUlr");
 
 								m.set("caption", caption, {
 									silent : true
@@ -191,12 +186,10 @@ define(
 				// success getting the Presage API
 				// TODO test with the words "page", "likw" 
 				presageSuccess : function(model, data) {
-					console.log("PRESAGE SUCCESS");
 				var result = $(data.firstChild.firstChild).siblings();
 				var arr = [];
 				for (var a=0 ; a< result.length ; a++){
 					// TODO check if the order of the words is always the same
-					console.log(a+" .... "+result[a].textContent);
 					arr.push(result[a].textContent);
 				}
 				
@@ -207,29 +200,24 @@ define(
 				
 				presageError : function(model, data){
 		
-					console.log("[PageCollection] presage error: "+data.responseText);
 					
 				},
 				
 				// on presage success, Query Flickr with the words from Presage
 				loadPresageImgs : function(w) {
-					console.log("[PageCollection] loadPresageImgs");
 				//
 				// adding the models will instantiate all the view.
 				// The views will only be rendered on "renderEvent"
 				// binding to this event is done in pageView initialize	
 				//this.add(this.defaults);
 				
-				console.log("[PageCollection] this.models.length "+this.models.length);
 				
 				for ( var a in this.models) {
 					if (this.models[a].get("status") == "awaitUrl" && this.models[a].get("cellId") != "r2c2-r2c2") {
-						console.log("[PageCollection] cellId"+this.models[a].get("cellId"));
 
 						var _w = w.shift();
 						
 						this.models[a].set("word",_w);
-						console.log(a+ " model>  "+this.models[a].get("word") );
 
 						var flickrProxy = new FlickrProxy;
 						flickrProxy.word = _w;
@@ -366,9 +354,6 @@ define(
 							if(models[b]){
 							if(models[b].get("divId") == currentId && models[b].get("word")){
 
-							console.log("11 PRESAGE FETCH");
-							console.log("xx cellId "+models[b].get("cellId"));
-							console.log("xxx word "+models[b].get("word"));
 							presageProxy.context = models[b].get("word");
 							presageProxy.fetch(presageFetchOpt);
 							}}

@@ -27,7 +27,6 @@ require.config({
 // use domReady to set autoInitializePage to false before JQM initialize
 
 require(['domReady!','jquery','jqueryMobile'], function (doc) {
-console.log("domReady");
 
 // let Backbone handle the routing
 $.mobile.linkBindingEnabled = false;
@@ -39,7 +38,7 @@ $.mobile.pushStateEnabled = false;
 $.mobile.autoInitializePage = false; 
 
 //TODO: check if in Chrome var popped is true when using the back btn
-
+//TODO: remove gap in transition
 // http://stackoverflow.com/questions/6421769/popstate-on-pages-load-in-chrome/10651028#10651028
 });
 

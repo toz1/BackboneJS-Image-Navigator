@@ -12,11 +12,9 @@ function($, Backbone, pageView, PresageProxy) {
 	
 		searchHandler : function(e){
 			
-		console.log("search: "+e.target.value);
 		this.collection.search(e.target.value);
 		},
 		setRouter : function(r){
-			console.log("[appView] router is set");
 			this.router = r;
 		},
 		onAdd : function(m) {

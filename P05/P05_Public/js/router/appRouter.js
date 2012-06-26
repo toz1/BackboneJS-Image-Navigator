@@ -20,13 +20,11 @@ define( ['jquery',
                 //in the html.
                 //TODO add deep linking keeping image and text
                 this.mvt = m;
-                console.log("toDiv: "+toDiv);
                 $.mobile.changePage(toDiv);
 
                 },
 
                 root: function() {
-                	console.log("[appRouter] root");
                 	this.navigate("", {trigger: false});
                 },
                 beforeChange : function(e, data) {
@@ -60,7 +58,7 @@ define( ['jquery',
                 	$(document).bind("pagebeforechange", this.beforeChange); 
                 	$(document).bind("pagechangefailed", this.pagechangefailed);
 
-                Backbone.history.start({pushState: true, root: "/index2"});
+                Backbone.history.start({pushState: true, root: "/index2#"});
                
                 $.mobile.initializePage();
                 }
